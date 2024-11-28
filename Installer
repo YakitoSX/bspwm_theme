@@ -54,7 +54,7 @@ clear
 
 ########## ---------- Install packages ---------- ##########
 
-printf "Installing needed packages.."
+printf "Installing needed packages..\n"
 
 dependencias=(alacritty base-devel bat brightnessctl bspwm dunst eza feh gvfs-mtp firefox git imagemagick jq \
                 jgmenu libwebp maim neovim npm pamixer pacman-contrib \
@@ -92,7 +92,7 @@ fi
 
 ########## ---------- Cloning the Rice! ---------- ##########
 
-printf "Downloading bspwm_theme"
+printf "Downloading bspwm_theme\n"
 
 repo_url="https://github.com/YakitoSX/bspwm_theme"
 repo_dir="$HOME/bspwm_theme"
@@ -111,7 +111,7 @@ clear
 
 # La carpeta 'themes' ya se descargó, vamos a mover los temas
 
-printf "Moving themes"
+printf "Moving themes\n"
 themes_dir="$repo_dir/themes"
 if [ -d "$themes_dir" ]; then
     echo "Found 'themes' directory, moving themes to appropriate locations..."
@@ -149,7 +149,7 @@ clear
 
 ########## ---------- Copy the Rice! ---------- ##########
 
-printf "Installing bspwm_theme.."
+printf "Installing bspwm_theme..\n"
 printf "Copying files to respective directories..\n"
 
 [ ! -d ~/.config ] && mkdir -p ~/.config
@@ -175,7 +175,7 @@ clear
 
 ########## ---------- Installing Paru ---------- ##########
 
-printf "Install Paru"
+printf "Install Paru\n"
 
 if command -v paru >/dev/null 2>&1; then
     printf "%s%sParu is already installed%s\n" "${BLD}" "${CGR}" "${CNC}"
@@ -193,7 +193,7 @@ fi
 sleep 3
 clear
 
-printf "Installing AUR dependencies"
+printf "Installing AUR dependencies\n"
 
 # Define an array of AUR dependencies
 aur_dependencies=(tdrop-git xqp rofi-greenclip ttf-maple i3lock-color simple-mtpfs eww-git)
@@ -218,9 +218,9 @@ printf "\n%s%sAll AUR dependencies checked and processed.%s\n" "${BLD}" "${CGR}"
 sleep 3
 clear
 
-########## ---------- Setting up BSPWM and Polybar ---------- ##########
+########## ---------- Setting up BSPWM and Sxhkd ---------- ##########
 
-printf "Setting up BSPWM and Polybar configuration."
+printf "Setting up BSPWM and sxhkd configuration.\n"
 
 # Permissions for bspwm and sxhkd
 chmod +x ~/.config/bspwm/bspwmrc
@@ -228,7 +228,7 @@ chmod +x ~/.config/bspwm/src/config/sxhkdrc
 
 ########## --------- Changing shell to zsh ---------- ##########
 
-printf "Changing default shell to zsh"
+printf "Changing default shell to zsh\n"
 
 	if [[ $SHELL != "/usr/bin/zsh" ]]; then
         printf "%s%sChanging your shell to zsh...%s\n\n" "${BLD}" "${CYE}" "${CNC}"
@@ -248,7 +248,7 @@ clear
 
 ########## --------- exit ---------- ##########
 
-printf "Installation is complete"
+printf "Installation is complete\n"
 
 printf "%sThe installation is complete, you %sneed%s to restart your machine.%s\n\n" "${BLD}" "${CBL}" "${CNC}" "${CNC}"
 
@@ -272,7 +272,7 @@ printf "%sThe installation is complete, you %sneed%s to restart your machine.%s\
 	done
 
 # Clean up: Remove the cloned repository and the installer script
-echo "Cleaning up temporary files..."
+echo "Cleaning up temporary files...\n"
 
 # Eliminar el directorio clonado
 rm -rf "$HOME/bspwm_theme"
@@ -280,4 +280,4 @@ rm -rf "$HOME/bspwm_theme"
 # Eliminar el archivo del instalador
 rm -f "$0"  # Esto eliminará el script del instalador
 
-echo "Cleanup completed!"
+echo "Cleanup completed!\n"
