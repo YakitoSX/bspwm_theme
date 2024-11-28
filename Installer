@@ -1,0 +1,264 @@
+#!/usr/bin/env bash
+#  ██╗███╗   ██╗███████╗████████╗ █████╗ ██╗     ██╗     ███████╗██████╗
+#  ██║████╗  ██║██╔════╝╚══██╔══╝██╔══██╗██║     ██║     ██╔════╝██╔══██╗
+#  ██║██╔██╗ ██║███████╗   ██║   ███████║██║     ██║     █████╗  ██████╔╝
+#  ██║██║╚██╗██║╚════██║   ██║   ██╔══██║██║     ██║     ██╔══╝  ██╔══██╗
+#  ██║██║ ╚████║███████║   ██║   ██║  ██║███████╗███████╗███████╗██║  ██║
+#  ╚═╝╚═╝  ╚═══╝╚══════╝   ╚═╝   ╚═╝  ╚═╝╚══════╝╚══════╝╚══════╝╚═╝  ╚═╝
+
+
+CRE=$(tput setaf 1)
+CYE=$(tput setaf 3)
+CGR=$(tput setaf 2)
+CBL=$(tput setaf 4)
+BLD=$(tput bold)
+CNC=$(tput sgr0)
+
+########## ---------- You must not run this as root ---------- ##########
+
+if [ "$(id -u)" = 0 ]; then
+    echo "This script MUST NOT be run as root user."
+    exit 1
+fi
+
+home_dir=$HOME
+current_dir=$(pwd)
+
+if [ "$current_dir" != "$home_dir" ]; then
+    printf "%s%sThe script must be executed from the HOME directory.%s\n" "${BLD}" "${CYE}" "${CNC}"
+    exit 1
+fi
+
+log_error() {
+    echo "[$(date '+%Y-%m-%d %H:%M:%S')] $1" >> "$ERROR_LOG"
+}
+
+is_installed() {
+    pacman -Qq "$1" &> /dev/null
+}
+
+########## ---------- Welcome ---------- ##########
+
+logo "Welcome!"
+printf '%s%sThis script will check if you have the necessary dependencies, and if not, it will install them. Then, it will clone my repository in your HOME directory.\nAfter that, it will create a backup of your files, and then copy the new files to your computer.\n\nMy dotfiles DO NOT modify any of your system configurations.\nYou will be prompted for your root password to install missing dependencies and/or to switch to zsh shell if its not your default.\n\nThis script doesnt have the potential power to break your system, it only copies files from my repository to your HOME directory.%s\n\n' "${BLD}" "${CRE}" "${CNC}"
+
+while true; do
+    read -rp " Do you wish to continue? [y/N]: " yn
+    case $yn in
+        [Yy]* ) break ;;
+        [Nn]* ) exit ;;
+        * ) printf " Error: just write 'y' or 'n'\n\n" ;;
+    esac
+done
+clear
+
+########## ---------- Install packages ---------- ##########
+
+logo "Installing needed packages.."
+
+dependencias=(alacritty base-devel bat brightnessctl bspwm dunst eza feh gvfs-mtp firefox git imagemagick jq \
+			        jgmenu libwebp maim mpc mpd neovim ncmpcpp npm pamixer pacman-contrib \
+			        papirus-icon-theme picom playerctl polybar polkit-gnome python-gobject \
+			        redshift rofi rustup sxhkd tmux ttf-inconsolata ttf-jetbrains-mono ttf-jetbrains-mono-nerd \
+			        ttf-joypixels ttf-terminus-nerd ttf-ubuntu-mono-nerd ueberzug webp-pixbuf-loader xclip xdg-user-dirs \
+			        xdo xdotool xsettingsd xorg-xdpyinfo xorg-xkill xorg-xprop xorg-xrandr xorg-xsetroot \
+			        xorg-xwininfo yazi zsh)
+
+printf "%s%sChecking for required packages...%s\n\n" "${BLD}" "${CBL}" "${CNC}"
+
+	for paquete in "${dependencias[@]}"; do
+        if ! is_installed "$paquete"; then
+            if sudo pacman -S "$paquete" --noconfirm >/dev/null 2> >(tee -a "$ERROR_LOG"); then
+                printf "%s%s%s %shas been installed successfully.%s\n" "${BLD}" "${CYE}" "$paquete" "${CBL}" "${CNC}"
+            else
+                printf "%s%s%s %shas not been installed correctly. See %sRiceError.log %sfor more details.%s\n" \
+                       "${BLD}" "${CYE}" "$paquete" "${CRE}" "${CBL}" "${CRE}" "${CNC}"
+                log_error "Failed to install package: $paquete"
+            fi
+            sleep 1
+        else
+            printf '%s%s%s %sis already installed on your system!%s\n' "${BLD}" "${CYE}" "$paquete" "${CGR}" "${CNC}"
+            sleep 1
+        fi
+    done
+sleep 3
+clear
+
+########## ---------- Preparing Folders ---------- ##########
+
+# Verifies if the archive user-dirs.dirs doesn't exist in ~/.config
+if [ ! -e "$HOME/.config/user-dirs.dirs" ]; then
+    xdg-user-dirs-update
+fi
+
+########## ---------- Cloning the Rice! ---------- ##########
+
+logo "Downloading dotfiles"
+
+repo_url="https://github.com/YakitoSX/bspwm_theme"
+repo_dir="$HOME/bspwm_theme"
+
+# Verifies if the folder of the repository exists, and if it does, deletes it
+if [ -d "$repo_dir" ]; then
+    printf "Removing existing dotfiles repository\n"
+    rm -rf "$repo_dir"
+fi
+
+# Clone the repository
+printf "Cloning bspwm_theme from %s\n" "$repo_url"
+git clone --depth=1 "$repo_url" "$repo_dir"
+sleep 3
+clear
+
+########## ---------- Copy the Rice! ---------- ##########
+
+logo "Installing bspwm_theme.."
+printf "Copying files to respective directories..\n"
+
+[ ! -d ~/.config ] && mkdir -p ~/.config
+[ ! -d ~/.local/bin ] && mkdir -p ~/.local/bin
+[ ! -d ~/.local/share ] && mkdir -p ~/.local/share
+
+for dirs in ~/bspwm_theme/config/*; do
+    dir_name=$(basename "$dirs")
+# If the directory is nvim and the user doesn't want to try it, skip this loop
+    if [[ $dir_name == "nvim" && $try_nvim != "y" ]]; then
+        continue
+    fi
+    if cp -R "${dirs}" ~/.config/ 2>> RiceError.log; then
+        printf "%s%s%s %sconfiguration installed succesfully%s\n" "${BLD}" "${CYE}" "${dir_name}" "${CGR}" "${CNC}"
+        sleep 1
+    else
+        printf "%s%s%s %sconfiguration failed to been installed, see %sRiceError.log %sfor more details.%s\n" "${BLD}" "${CYE}" "${dir_name}" "${CRE}" "${CBL}" "${CRE}" "${CNC}"
+        sleep 1
+    fi
+done
+
+fc-cache -rv >/dev/null 2>&1
+
+printf "\n\n%s%sFiles copied succesfully!!%s\n" "${BLD}" "${CGR}" "${CNC}"
+sleep 3
+clear
+
+########## ---------- Installing Paru ---------- ##########
+
+logo "Install Paru"
+
+if command -v paru >/dev/null 2>&1; then
+    printf "%s%sParu is already installed%s\n" "${BLD}" "${CGR}" "${CNC}"
+else
+    printf "%s%sInstalling paru%s\n" "${BLD}" "${CBL}" "${CNC}"
+    {
+        cd "$HOME" || exit
+        git clone https://aur.archlinux.org/paru-bin.git
+        cd paru-bin || exit
+        makepkg -si --noconfirm
+        } || {
+        printf "\n%s%sFailed to install Paru. You may need to install it manually%s\n" "${BLD}" "${CRE}" "${CNC}"
+    }
+fi
+sleep 3
+clear
+
+########## ---------- Installing AUR dependencies ---------- ##########
+
+logo "Installing AUR dependencies."
+
+aur_apps=(tdrop-git xqp rofi-greenclip ttf-maple i3lock-color simple-mtpfs eww-git)
+
+printf "%s%sChecking for required packages...%s\n\n" "${BLD}" "${CBL}" "${CNC}"
+for aur_package in "${aur_apps[@]}"; do
+    if ! is_installed "$aur_package"; then
+        if paru -S --skipreview --noconfirm "$aur_package" 2> >(tee -a "$ERROR_LOG"); then
+            printf "%s%s%s %shas been installed succesfully.%s\n" "${BLD}" "${CYE}" "$aur_package" "${CBL}" "${CNC}"
+        else
+            printf "%s%s%s %shas not been installed correctly. See %sRiceError.log %sfor more details.%s\n" "${BLD}" "${CYE}" "$aur_package" "${CRE}" "${CBL}" "${CRE}" "${CNC}"
+            log_error "Failed to install package: $aur_package"
+        fi
+        sleep 1
+    else
+        printf '%s%s%s %sis already installed on your system!%s\n' "${BLD}" "${CYE}" "$aur_package" "${CGR}" "${CNC}"
+        sleep 1
+    fi
+done
+sleep 3
+clear
+
+########## ---------- Enabling MPD service ---------- ##########
+
+logo "Enabling mpd service"
+
+	if systemctl is-enabled --quiet mpd.service; then
+        printf "%s%sDisabling and stopping the global mpd service%s\n" "${BLD}" "${CBL}" "${CNC}"
+
+        if sudo systemctl disable --now mpd.service >/dev/null 2> >(tee -a "$ERROR_LOG"); then
+            sleep 1
+            printf "\n%s[%sOK%s%s]%s Global MPD service disabled successfully\n\n" \
+                   "${BLD}" "${CGR}" "${CNC}" "${BLD}" "${CNC}"
+        else
+            sleep 1
+            printf "%s[%sError%s%s] Please check %sRiceError.log%s for details\n\n" \
+               "${BLD}" "${CRE}" "${CNC}" "${BLD}" "${CYE}" "${CNC}"
+            log_error "Failed to disable global MPD service"
+		fi
+	fi
+
+    printf "%s%sEnabling and starting the user-level mpd service%s\n\n" "${BLD}" "${CBL}" "${CNC}"
+
+    if systemctl --user enable --now mpd.service >/dev/null 2> >(tee -a "$ERROR_LOG"); then
+        sleep 1
+        printf "%s[%sOK%s%s]%s User-level MPD service enabled successfully\n\n" \
+               "${BLD}" "${CGR}" "${CNC}" "${BLD}" "${CNC}"
+    else
+        sleep 1
+        printf "%s[%sError%s%s] Please check %sRiceError.log%s for details\n\n" \
+               "${BLD}" "${CRE}" "${CNC}" "${BLD}" "${CYE}" "${CNC}"
+        log_error "Failed to enable user-level MPD service"
+    fi
+sleep 3
+clear
+
+########## --------- Changing shell to zsh ---------- ##########
+
+logo "Changing default shell to zsh"
+
+	if [[ $SHELL != "/usr/bin/zsh" ]]; then
+        printf "%s%sChanging your shell to zsh...%s\n\n" "${BLD}" "${CYE}" "${CNC}"
+
+        if chsh -s /usr/bin/zsh 2> >(tee -a "$ERROR_LOG"); then
+            printf "\n%s[%sOK%s%s] Shell changed to zsh successfully!%s\n\n" "${BLD}" "${CGR}" "${CNC}" "${BLD}" "${CNC}"
+        else
+            printf "%s%sError changing your shell to zsh. Please check %sRiceError.log%s for details%s\n\n" \
+                   "${BLD}" "${CRE}" "${CYE}" "${CRE}" "${CNC}"
+            log_error "Failed to change shell to zsh"
+        fi
+    else
+        printf "%s%sYour shell is already zsh%s\n\n" "${BLD}" "${CGR}" "${CNC}"
+    fi
+sleep 3
+clear
+
+########## --------- exit ---------- ##########
+
+logo "Installation is compñete"
+
+printf "%sThe installation is complete, you %sneed%s to restart your machine.%s\n\n" "${BLD}" "${CBL}" "${CNC}" "${CNC}"
+
+	while true; do
+		read -rp " Reboot now? [y/N]: " yn
+		case $yn in
+			[Yy]* )
+				printf "\n%s%sRebooting now...%s\n" "${BLD}" "${CGR}" "${CNC}"
+				sleep 3
+				reboot
+				break
+				;;
+			[Nn]* )
+				printf "\n%s%sOK, remember to restart later!%s\n\n" "${BLD}" "${CYE}" "${CNC}"
+				break
+				;;
+			* )
+				printf "\n%s%sPlease answer yes or no.%s\n\n" "${BLD}" "${CRE}" "${CNC}"
+				;;
+		esac
+	done
