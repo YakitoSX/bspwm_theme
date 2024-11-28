@@ -3,7 +3,7 @@
 # Terminate or reload existing processes if necessary.
 . "${HOME}"/.config/bspwm/src/Process.bash
 
-# Vars config for Emilia Rice
+# Vars config
 # Bspwm border		# Normal border color	# Focused border color
 BORDER_WIDTH="0"	NORMAL_BC="#414868"		FOCUSED_BC="#bb9af7"
 
@@ -20,8 +20,7 @@ blue="#7aa2f7"   magenta="#bb9af7"   cyan="#7dcfff"   white="#a9b1d6"
 blueb="#7aa2f7"  magentab="#bb9af7"  cyanb="#7dcfff"  whiteb="#c0caf5"
 
 # Gtk theme vars
-gtk_theme="TokyoNight-zk"	gtk_icons="TokyoNight-SE"	gtk_cursor="Qogirr-Dark"
-
+gtk_theme="Nordic_darker"	gtk_icons="Papirus-Dark"	gtk_cursor="catppuccin-mocha-dark-cursors"
 
 # Set bspwm configuration
 set_bspwm_config() {
@@ -40,15 +39,23 @@ set_picom_config() {
 	picom_conf_file="$HOME/.config/bspwm/src/config/picom.conf"
 	picom_rules_file="$HOME/.config/bspwm/src/config/picom-rules.conf"
 
+	# Configuración de picom
 	sed -i "$picom_conf_file" \
 		-e "s/shadow = .*/shadow = ${P_SHADOWS};/" \
 		-e "s/shadow-color = .*/shadow-color = \"${SHADOW_C}\"/" \
 		-e "s/fading = .*/fading = ${P_FADE};/" \
 		-e "s/corner-radius = .*/corner-radius = ${P_CORNER_R}/"
 
+	# Cambiar opacidad para ventanas inactivas
 	sed -i "$picom_rules_file" \
-		-e "95s/	opacity = .*/	opacity = 1;/"
+		-e "s/opacity = .*/opacity = 1;/"
 
+	# Añadir regla para cambiar la opacidad de aplicaciones inactivas
+	sed -i "$picom_rules_file" \
+		-e '/# Inactive windows opacity/a\opacity = 0.75;' \
+		-e '/# Exclude polybar from transparency/a\window_type = "dock" opacity = 1;'
+
+	# Si las animaciones están habilitadas
 	if [[ "$ANIMATIONS" = "true" ]]; then
 		sed -i "$picom_rules_file" \
 			-e '/picom-animations/c\@include "picom-animations.conf"'
@@ -117,7 +124,7 @@ set_launchers() {
 
 	# Rofi launchers
 	cat >"$HOME"/.config/bspwm/src/rofi-themes/shared.rasi <<EOF
-// Rofi colors for Emilia
+// Rofi colors
 
 * {
     font: "JetBrainsMono NF Bold 9";

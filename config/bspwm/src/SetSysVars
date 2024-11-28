@@ -53,7 +53,6 @@ function setup_system_vars() {
 	fi
 
     sed -i "s/size = [0-9]*/size = $font_size/" ~/.config/alacritty/fonts.toml
-    sed -i "s/font_size [0-9]*/font_size $font_size/" ~/.config/kitty/kitty.conf
 }
 
 # Ejecutar la configuración

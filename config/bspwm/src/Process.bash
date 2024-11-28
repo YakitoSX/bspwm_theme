@@ -20,8 +20,8 @@
 	fi
 	sleep 0.30
 
-	# Load random wallpaper depending on the theme you are.
-	feh -z --no-fehbg --bg-fill "${HOME}"/.config/bspwm/rices/"${RICE}"/walls
+	# Load the wallpaper.
+	feh feh --no-fehbg --bg-fill "${HOME}"/.config/bspwm/Theme/walls/wallpaper.webp
 
 # Explanation: Why are some applications or daemons started or killed here and others in bspwmrc?
 
