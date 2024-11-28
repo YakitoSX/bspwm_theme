@@ -62,7 +62,7 @@ dependencias=(alacritty base-devel bat brightnessctl bspwm dunst eza feh gvfs-mt
                 redshift rofi rustup sxhkd tmux ttf-inconsolata ttf-jetbrains-mono ttf-jetbrains-mono-nerd \
                 ttf-joypixels ttf-terminus-nerd ttf-ubuntu-mono-nerd ueberzug webp-pixbuf-loader xclip xdg-user-dirs \
                 xdo xdotool xsettingsd xorg-xdpyinfo xorg-xkill xorg-xprop xorg-xrandr xorg-xsetroot \
-                xorg-xwininfo yazi zsh)
+                xorg-xwininfo yazi zsh nerd-fonts-complete font-awesome jdk-openjdk)
 
 printf "%s%sChecking for required packages...%s\n\n" "${BLD}" "${CBL}" "${CNC}"
 
@@ -159,10 +159,16 @@ printf "Copying files to respective directories..\n"
 for dirs in ~/bspwm_theme/config/*; do
     dir_name=$(basename "$dirs")
     if cp -R "${dirs}" ~/.config/ 2>> RiceError.log; then
-        printf "%s%s%s %sconfiguration installed successfully%s\n" "${BLD}" "${CYE}" "${dir_name}" "${CGR}" "${CNC}"
+        printf "%s%s%s %sconfiguration installed successfully%s\n" "${BLD}" "${CYE}" "$dir_name" "${CGR}" "${CNC}"
+        
+        # Asegurarse de que los scripts copiados tengan permisos de ejecución
+        if [[ -f "~/.config/$dir_name" && "$dir_name" == *.sh ]]; then
+            chmod +x "~/.config/$dir_name"
+            printf "Permissions set for script: %s\n" "$dir_name"
+        fi
         sleep 1
     else
-        printf "%s%s%s %sconfiguration failed to be installed, see %sRiceError.log %sfor more details.%s\n" "${BLD}" "${CYE}" "${dir_name}" "${CRE}" "${CBL}" "${CRE}" "${CNC}"
+        printf "%s%s%s %sconfiguration failed to be installed, see %sRiceError.log %sfor more details.%s\n" "${BLD}" "${CYE}" "$dir_name" "${CRE}" "${CBL}" "${CRE}" "${CNC}"
         sleep 1
     fi
 done
@@ -248,6 +254,14 @@ clear
 
 ########## --------- exit ---------- ##########
 
+# Clean up: Remove the cloned repository and the installer script
+echo "Cleaning up temporary files...\n"
+
+# Eliminar el directorio clonado
+rm -rf "$HOME/bspwm_theme"
+
+echo "Cleanup completed!\n"
+
 printf "Installation is complete\n"
 
 printf "%sThe installation is complete, you %sneed%s to restart your machine.%s\n\n" "${BLD}" "${CBL}" "${CNC}" "${CNC}"
@@ -257,6 +271,8 @@ printf "%sThe installation is complete, you %sneed%s to restart your machine.%s\
 		case $yn in
 			[Yy]* )
 				printf "\n%s%sRebooting now...%s\n" "${BLD}" "${CGR}" "${CNC}"
+				# Eliminar el archivo del instalador
+				rm -f "$0"  # Esto eliminará el script del instalador
 				sleep 3
 				reboot
 				break
@@ -270,14 +286,3 @@ printf "%sThe installation is complete, you %sneed%s to restart your machine.%s\
 				;;
 		esac
 	done
-
-# Clean up: Remove the cloned repository and the installer script
-echo "Cleaning up temporary files...\n"
-
-# Eliminar el directorio clonado
-rm -rf "$HOME/bspwm_theme"
-
-# Eliminar el archivo del instalador
-rm -f "$0"  # Esto eliminará el script del instalador
-
-echo "Cleanup completed!\n"

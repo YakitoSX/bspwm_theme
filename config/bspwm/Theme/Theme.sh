@@ -20,7 +20,7 @@ blue="#7aa2f7"   magenta="#bb9af7"   cyan="#7dcfff"   white="#a9b1d6"
 blueb="#7aa2f7"  magentab="#bb9af7"  cyanb="#7dcfff"  whiteb="#c0caf5"
 
 # Gtk theme vars
-gtk_theme="Nordic_darker"	gtk_icons="Papirus-Dark"	gtk_cursor="catppuccin-mocha-dark-cursors"
+gtk_theme="Nordic-darker"	gtk_icons="Papirus-Dark"	gtk_cursor="catppuccin-mocha-dark-cursors"
 
 # Set bspwm configuration
 set_bspwm_config() {
