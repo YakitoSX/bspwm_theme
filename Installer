@@ -28,6 +28,8 @@ if [ "$current_dir" != "$home_dir" ]; then
     exit 1
 fi
 
+ERROR_LOG="$HOME/InstallerError.log"
+
 log_error() {
     echo "[$(date '+%Y-%m-%d %H:%M:%S')] $1" >> "$ERROR_LOG"
 }
