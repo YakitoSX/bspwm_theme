@@ -3,19 +3,14 @@
 #	The function of this script is only to detect if your Bluetooth interface is present
 #	and active and display the information in POLYBAR.
 #
-#	gh0stzk - https://github.com/gh0stzk/dotfiles
-#	07.08.2024 11:55:34
 
 if [ ! -d /sys/class/bluetooth ]; then
 	echo # No Bluetooth interface
 	exit 0
 fi
 
-# Load current theme
-read -r current_rice <"$HOME"/.config/bspwm/.rice
-
 # Colors
-FILE="$HOME/.config/bspwm/rices/${current_rice}/config.ini"
+FILE="$HOME/.config/bspwm/Theme/config.ini"
 POWER_ON=$(awk '/^blue =/ {print $3; exit}' "$FILE")
 POWER_OFF=$(awk '/^grey =/ {print $3; exit}' "$FILE")
 

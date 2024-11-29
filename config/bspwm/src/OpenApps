@@ -51,9 +51,6 @@ case "$1" in
     --nvim)
         xdg-terminal --nvim
         ;;
-    --music)
-        xdg-terminal --music
-        ;;
         # Apps
     --filemanager)
         thunar
@@ -71,9 +68,6 @@ case "$1" in
     --KeyHelp)
 		eww -c "$WIDGET_DIR" open --toggle csheet
 		;;
-    --calendar)
-        eww -c "$WIDGET_DIR" open --toggle date
-        ;;
     *)
         echo "Invalid Option"
         ;;

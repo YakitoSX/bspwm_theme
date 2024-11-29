@@ -25,14 +25,6 @@ case $chosen in
     "")
         systemctl reboot
         ;;
-    "")
-        ScreenLocker
-        ;;
-    "")
-        mpc -q pause
-        amixer set Master mute
-        systemctl suspend
-        ;;
     "")
         bspc quit
         ;;

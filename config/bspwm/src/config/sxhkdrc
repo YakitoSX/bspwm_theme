@@ -16,11 +16,11 @@ super + Return
 
 # PowerMenu
 super + Escape
-	"$HOME"/.config/bspwm/src/OpenApps.sh --powermenu
+	OpenApps --powermenu
 
 # program launcher
 super + @space
-	"$HOME"/.config/bspwm/src/OpenApps.sh --menu
+	OpenApps --menu
 
 #
 # bspwm hotkeys
@@ -143,20 +143,20 @@ XF86MonBrightness{Up,Down}
 
 # Volume control
 XF86Audio{RaiseVolume,LowerVolume,Mute}
-	Volume{ --inc, --dec, --toggle}
+	"$HOME"/.config/bspwm/src/Volume.sh { --inc, --dec, --toggle}
 
 # Screenshot
 super + alt + s
-	"$HOME"/.config/bspwm/src/OpenApps.sh --screenshot
+	OpenApps --screenshot
 
 # Clipboard
 super + alt + c
-	"$HOME"/.config/bspwm/src/OpenApps.sh --clipboard
+	OpenApps --clipboard
 
 # Network Manager
 super + alt + n
-	"$HOME"/.config/bspwm/src/OpenApps.sh --netmanager
+	OpenApps --netmanager
 
 # Mount Android Phones
 super + alt + a
-	"$HOME"/.config/bspwm/src/OpenApps.sh --android
+	OpenApps --android

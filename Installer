@@ -63,7 +63,7 @@ dependencias=(alacritty base-devel bat brightnessctl bspwm dunst eza feh gvfs-mt
                 redshift rofi rustup sxhkd ttf-inconsolata ttf-jetbrains-mono ttf-jetbrains-mono-nerd \
                 ttf-joypixels ttf-terminus-nerd ttf-ubuntu-mono-nerd ueberzug webp-pixbuf-loader xclip xdg-user-dirs \
                 xdo xdotool xsettingsd xorg-xdpyinfo xorg-xkill xorg-xprop xorg-xrandr xorg-xsetroot \
-                xorg-xwininfo yazi zsh jdk-openjdk xz bzip2 p7zip lbzip2 lrzip arj lzop cpio unrar)
+                xorg-xwininfo yazi zsh jdk-openjdk xz bzip2 p7zip lbzip2 lrzip arj lzop cpio unrar lxappearance)
 
 printf "%s%sChecking for required packages...%s\n\n" "${BLD}" "${CBL}" "${CNC}"
 
@@ -127,6 +127,9 @@ for font in "${fonts[@]}"; do
     fi
 done
 
+sleep 3
+clear
+
 ########## ---------- Preparing Folders ---------- ##########
 
 if [ ! -e "$HOME/.config/user-dirs.dirs" ]; then
@@ -147,6 +150,7 @@ fi
 
 printf "Cloning bspwm_theme from %s\n" "$repo_url"
 git clone --depth=1 "$repo_url" "$repo_dir"
+
 sleep 3
 clear
 
@@ -215,12 +219,11 @@ done
 fc-cache -rv >/dev/null 2>&1
 
 printf "\n\n%s%sFiles copied successfully!!%s\n" "${BLD}" "${CGR}" "${CNC}"
+
 sleep 3
 clear
 
 ########## ---------- Installing Paru ---------- ##########
-
-printf "Install Paru\n"
 
 if command -v paru >/dev/null 2>&1; then
     printf "%s%sParu is already installed%s\n" "${BLD}" "${CGR}" "${CNC}"
@@ -235,6 +238,7 @@ else
         printf "\n%s%sFailed to install Paru. You may need to install it manually%s\n" "${BLD}" "${CRE}" "${CNC}"
     }
 fi
+
 sleep 3
 clear
 
@@ -260,15 +264,20 @@ for aur_package in "${aur_dependencies[@]}"; do
 done
 
 printf "\n%s%sAll AUR dependencies checked and processed.%s\n" "${BLD}" "${CGR}" "${CNC}"
+
 sleep 3
 clear
 
-########## ---------- Setting up BSPWM and Sxhkd ---------- ##########
+########## ---------- Setting up BSPWM and OpenApps ---------- ##########
 
 printf "Setting up BSPWM configuration.\n"
 
 # Permissions for bspwm
 chmod +x ~/.config/bspwm/bspwmrc
+chmod +x ~/.config/bspwm/src/OpenApps
+
+sleep 3
+clear
 
 ########## --------- Changing zsh ---------- ##########
 
@@ -291,6 +300,7 @@ if [ ! -d "$HOME/.oh-my-zsh" ]; then
 else
     printf "%s%sOh My Zsh is already installed!%s\n" "${BLD}" "${CGR}" "${CNC}"
 fi
+
 sleep 3
 clear
 
@@ -311,6 +321,7 @@ printf "Changing default shell to zsh\n"
     else
         printf "%s%sYour shell is already zsh%s\n\n" "${BLD}" "${CGR}" "${CNC}"
     fi
+
 sleep 3
 clear
 
@@ -331,6 +342,9 @@ if [ ! -s InstallerError.log ]; then
 else
     printf "Errors were logged in InstallerError.log. Please review them.\n"
 fi
+
+sleep 3
+clear
 
 printf "Installation is complete\n"
 

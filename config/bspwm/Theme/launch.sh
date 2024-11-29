@@ -19,9 +19,6 @@ blackb="#414868"  redb="#f7768e"  greenb="#9ece6a"  yellowb="#e0af68"
 blue="#7aa2f7"   magenta="#bb9af7"   cyan="#7dcfff"   white="#a9b1d6"
 blueb="#7aa2f7"  magentab="#bb9af7"  cyanb="#7dcfff"  whiteb="#c0caf5"
 
-# Gtk theme vars
-gtk_theme="Nordic-darker"	gtk_icons="Papirus-Dark"	gtk_cursor="catppuccin-mocha-dark-cursors"
-
 # Set bspwm configuration
 set_bspwm_config() {
 	bspc config border_width ${BORDER_WIDTH}
@@ -137,76 +134,6 @@ set_launchers() {
     urgent: ${red};
 }
 EOF
-
-	# Screenlock colors
-	sed -i "$HOME"/.config/bspwm/src/ScreenLocker \
-		-e "s/bg=.*/bg=${bg:1}/" \
-		-e "s/fg=.*/fg=${fg:1}/" \
-		-e "s/ring=.*/ring=${black:1}/" \
-		-e "s/wrong=.*/wrong=${red:1}/" \
-		-e "s/date=.*/date=${fg:1}/" \
-		-e "s/verify=.*/verify=${green:1}/"
-}
-
-set_appearance() {
-    # Verificar si xsettingsd está corriendo
-    if pidof -q xsettingsd; then
-        # Si xsettingsd está corriendo, editamos el archivo de configuración de xsettingsd
-        echo "xsettingsd is running. Updating configuration..."
-        # Verificar si el archivo de configuración de xsettingsd existe
-        if [ ! -f "$HOME/.config/bspwm/src/config/xsettingsd" ]; then
-            echo "Creating xsettingsd config..."
-            mkdir -p "$HOME/.config/bspwm/src/config"
-            echo -e "Net/ThemeName \"$gtk_theme\"\nNet/IconThemeName \"$gtk_icons\"\nGtk/CursorThemeName \"$gtk_cursor\"" > "$HOME/.config/bspwm/src/config/xsettingsd"
-        else
-            # Si el archivo existe, lo actualizamos con los nuevos valores
-            sed -i "$HOME/.config/bspwm/src/config/xsettingsd" \
-                -e "s|Net/ThemeName .*|Net/ThemeName \"$gtk_theme\"|" \
-                -e "s|Net/IconThemeName .*|Net/IconThemeName \"$gtk_icons\"|" \
-                -e "s|Gtk/CursorThemeName .*|Gtk/CursorThemeName \"$gtk_cursor\"|"
-        fi
-    else
-        # Si xsettingsd no está corriendo, intentar modificar gtk-3.0/settings.ini
-        echo "xsettingsd is not running. Updating GTK3 settings..."
-
-        # Verificar si el archivo settings.ini existe
-        if [ ! -f "$HOME/.config/gtk-3.0/settings.ini" ]; then
-            echo "Creating GTK3 settings.ini..."
-            mkdir -p "$HOME/.config/gtk-3.0"
-            echo -e "[Settings]\ngtk-theme-name=$gtk_theme\ngtk-icon-theme-name=$gtk_icons\ngtk-cursor-theme-name=$gtk_cursor" > "$HOME/.config/gtk-3.0/settings.ini"
-        else
-            # Si el archivo settings.ini existe, lo actualizamos con los nuevos valores
-            sed -i "$HOME/.config/gtk-3.0/settings.ini" \
-                -e "s/gtk-theme-name=.*/gtk-theme-name=$gtk_theme/" \
-                -e "s/gtk-icon-theme-name=.*/gtk-icon-theme-name=$gtk_icons/" \
-                -e "s/gtk-cursor-theme-name=.*/gtk-cursor-theme-name=$gtk_cursor/"
-        fi
-
-        # Verificar si el archivo .gtkrc-2.0 existe y crearlo si es necesario
-        if [ ! -f "$HOME/.gtkrc-2.0" ]; then
-            echo "Creating .gtkrc-2.0..."
-            echo -e "gtk-theme-name=\"$gtk_theme\"\ngtk-icon-theme-name=\"$gtk_icons\"\ngtk-cursor-theme-name=\"$gtk_cursor\"" > "$HOME/.gtkrc-2.0"
-        else
-            # Si el archivo .gtkrc-2.0 existe, lo actualizamos
-            sed -i "$HOME/.gtkrc-2.0" \
-                -e "s/gtk-theme-name=.*/gtk-theme-name=\"$gtk_theme\"/" \
-                -e "s/gtk-icon-theme-name=.*/gtk-icon-theme-name=\"$gtk_icons\"/" \
-                -e "s/gtk-cursor-theme-name=.*/gtk-cursor-theme-name=\"$gtk_cursor\"/"
-        fi
-    fi
-
-    # Actualizar el tema de cursores
-    sed -i -e "s/Inherits=.*/Inherits=$gtk_cursor/" "$HOME/.icons/catppuccin-mocha-dark-cursors/index.theme"
-
-    # Recargar la configuración de xsettingsd si está corriendo
-    if pidof -q xsettingsd; then
-        killall -HUP xsettingsd
-    fi
-
-    # Aplicar el cursor
-    xsetroot -cursor_name left_ptr
-
-    echo "Appearance settings applied successfully."
 }
 
 # Launch theme
@@ -229,5 +156,4 @@ set_picom_config
 set_dunst_config
 set_eww_colors
 set_launchers
-set_appearance
 launch_theme

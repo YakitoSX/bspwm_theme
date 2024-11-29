@@ -56,8 +56,8 @@ pidof -q sxhkd || { sxhkd -c "${HOME}"/.config/bspwm/src/config/sxhkdrc & }
 # Launch picom
 pidof -q picom || { picom --config "${HOME}"/.config/bspwm/src/config/picom.conf & }
 
-# Load current theme
-"${HOME}"/.config/bspwm/Theme/Theme.sh
+# Load theme
+"${HOME}"/.config/bspwm/Theme/launch.sh
 
 # Launch xsettingsd
 pidof -q xsettings || { xsettingsd --config="${HOME}"/.config/bspwm/src/config/xsettingsd >/dev/null 2>&1 & }
