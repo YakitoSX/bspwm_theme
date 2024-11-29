@@ -167,7 +167,7 @@ set_appearance() {
 			-e "s/gtk-cursor-theme-name=.*/gtk-cursor-theme-name=\"$gtk_cursor\"/"
 	fi
 
-	sed -i -e "s/Inherits=.*/Inherits=$gtk_cursor/" "$HOME"/.icons/default/index.theme
+	sed -i -e "s/Inherits=.*/Inherits=$gtk_cursor/" "$HOME"/.icons/catppuccin-mocha-dark-cursors/index.theme
 
 	# Reload daemon and apply gtk theme
 	pidof -q xsettingsd && killall -HUP xsettingsd

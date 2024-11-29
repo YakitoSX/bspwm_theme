@@ -59,10 +59,10 @@ printf "Installing needed packages..\n"
 dependencias=(alacritty base-devel bat brightnessctl bspwm dunst eza feh gvfs-mtp firefox git imagemagick jq \
                 jgmenu libwebp maim neovim npm pamixer pacman-contrib \
                 papirus-icon-theme picom playerctl polybar polkit-gnome python-gobject \
-                redshift rofi rustup sxhkd tmux ttf-inconsolata ttf-jetbrains-mono ttf-jetbrains-mono-nerd \
+                redshift rofi rustup sxhkd ttf-inconsolata ttf-jetbrains-mono ttf-jetbrains-mono-nerd \
                 ttf-joypixels ttf-terminus-nerd ttf-ubuntu-mono-nerd ueberzug webp-pixbuf-loader xclip xdg-user-dirs \
                 xdo xdotool xsettingsd xorg-xdpyinfo xorg-xkill xorg-xprop xorg-xrandr xorg-xsetroot \
-                xorg-xwininfo yazi zsh nerd-fonts-complete font-awesome jdk-openjdk)
+                xorg-xwininfo yazi zsh jdk-openjdk xz bzip2 p7zip lbzip2 lrzip arj lzop cpio unrar)
 
 printf "%s%sChecking for required packages...%s\n\n" "${BLD}" "${CBL}" "${CNC}"
 
@@ -71,7 +71,7 @@ for paquete in "${dependencias[@]}"; do
         if sudo pacman -S "$paquete" --noconfirm >/dev/null 2> >(tee -a "$ERROR_LOG"); then
             printf "%s%s%s %shas been installed successfully.%s\n" "${BLD}" "${CYE}" "$paquete" "${CBL}" "${CNC}"
         else
-            printf "%s%s%s %shas not been installed correctly. See %sRiceError.log %sfor more details.%s\n" \
+            printf "%s%s%s %shas not been installed correctly. See %sInstallerError.log %sfor more details.%s\n" \
                    "${BLD}" "${CYE}" "$paquete" "${CRE}" "${CBL}" "${CRE}" "${CNC}"
             log_error "Failed to install package: $paquete"
         fi
@@ -83,6 +83,48 @@ for paquete in "${dependencias[@]}"; do
 done
 sleep 3
 clear
+
+########## ---------- Installing Yay ---------- ##########
+
+printf "Install Yay\n"
+
+if command -v yay >/dev/null 2>&1; then
+    printf "%s%sYay is already installed%s\n" "${BLD}" "${CGR}" "${CNC}"
+else
+    printf "%s%sInstalling yay%s\n" "${BLD}" "${CBL}" "${CNC}"
+    {
+        cd "$HOME" || exit
+        git clone https://aur.archlinux.org/yay.git
+        cd yay || exit 1
+        makepkg -si --noconfirm
+	cd ..
+	rm -rf yay
+	printf "%s%sYay has been installed successfully!%s\n" "${BLD}" "${CGR}" "${CNC}"
+    } || {
+        printf "\n%s%sFailed to install Yay. You may need to install it manually%s\n" "${BLD}" "${CRE}" "${CNC}"
+    }
+fi
+sleep 3
+clear
+
+########## ----------Insalling fonts ---------- ##########
+
+fonts=("nerd-fonts-complete" "ttf-font-awesome")
+
+# Instalar fuentes con yay
+for font in "${fonts[@]}"; do
+    if ! pacman -Qi "$font" &>/dev/null; then
+        printf "%s%sInstalling %s...%s\n" "${BLD}" "${CYE}" "$font" "${CNC}"
+        if yay -S --noconfirm "$font" >/dev/null 2> >(tee -a "$ERROR_LOG"); then
+            printf "%s%s%s has been installed successfully.%s\n" "${BLD}" "${CYE}" "$font" "${CNC}"
+        else
+            printf "%s%sError: %s could not be installed. Check %s%s%s for details.%s\n" \
+                   "${BLD}" "${CRE}" "$font" "${CYE}" "$ERROR_LOG" "${CRE}" "${CNC}"
+        fi
+    else
+        printf "%s%s%s is already installed on your system!%s\n" "${BLD}" "${CGR}" "$font" "${CNC}"
+    fi
+done
 
 ########## ---------- Preparing Folders ---------- ##########
 
@@ -116,15 +158,15 @@ themes_dir="$repo_dir/themes"
 if [ -d "$themes_dir" ]; then
     echo "Found 'themes' directory, moving themes to appropriate locations..."
     
+    # Crear las carpetas de destino si no existen
+    [ ! -d "$HOME/.themes" ] && mkdir -p "$HOME/.themes"
+    [ ! -d "$HOME/.icons" ] && mkdir -p "$HOME/.icons"
+    
     # Mover los temas GTK que están dentro de 'GTK_THEME'
     if [ -d "$themes_dir/GTK_THEME" ]; then
         echo "Moving GTK themes..."
-        for theme in "$themes_dir/GTK_THEME"/*; do
-            if [ -d "$theme" ]; then
-                mv "$theme" "$HOME/.themes/"
-                echo "Moved GTK theme: $(basename "$theme")"
-            fi
-        done
+        mv "$themes_dir/GTK_THEME"/* "$HOME/.themes/"
+        echo "Moved GTK themes to $HOME/.themes/"
     else
         echo "No GTK themes found in the 'GTK_THEME' directory."
     fi
@@ -132,12 +174,8 @@ if [ -d "$themes_dir" ]; then
     # Mover los temas de cursor que están dentro de 'CURSOR_THEME'
     if [ -d "$themes_dir/CURSOR_THEME" ]; then
         echo "Moving Cursor themes..."
-        for theme in "$themes_dir/CURSOR_THEME"/*; do
-            if [ -d "$theme" ]; then
-                mv "$theme" "$HOME/.icons/"
-                echo "Moved Cursor theme: $(basename "$theme")"
-            fi
-        done
+        mv "$themes_dir/CURSOR_THEME"/* "$HOME/.icons/"
+        echo "Moved Cursor themes to $HOME/.icons/"
     else
         echo "No Cursor themes found in the 'CURSOR_THEME' directory."
     fi
@@ -158,17 +196,16 @@ printf "Copying files to respective directories..\n"
 
 for dirs in ~/bspwm_theme/config/*; do
     dir_name=$(basename "$dirs")
-    if cp -R "${dirs}" ~/.config/ 2>> RiceError.log; then
+    if cp -R "${dirs}" ~/.config/ 2>> InstallerError.log; then
         printf "%s%s%s %sconfiguration installed successfully%s\n" "${BLD}" "${CYE}" "$dir_name" "${CGR}" "${CNC}"
         
         # Asegurarse de que los scripts copiados tengan permisos de ejecución
-        if [[ -f "~/.config/$dir_name" && "$dir_name" == *.sh ]]; then
-            chmod +x "~/.config/$dir_name"
-            printf "Permissions set for script: %s\n" "$dir_name"
-        fi
+        find ~/.config/"$dir_name" -type f -name "*.sh" -exec chmod +x {} \;
+        printf "Permissions set for scripts in: %s\n" "$dir_name"
+        
         sleep 1
     else
-        printf "%s%s%s %sconfiguration failed to be installed, see %sRiceError.log %sfor more details.%s\n" "${BLD}" "${CYE}" "$dir_name" "${CRE}" "${CBL}" "${CRE}" "${CNC}"
+        printf "%s%s%s %sconfiguration failed to be installed, see %sInstallerError.log %sfor more details.%s\n" "${BLD}" "${CYE}" "$dir_name" "${CRE}" "${CBL}" "${CRE}" "${CNC}"
         sleep 1
     fi
 done
@@ -210,7 +247,7 @@ for aur_package in "${aur_dependencies[@]}"; do
         if paru -S "$aur_package" --noconfirm >/dev/null 2> >(tee -a "$ERROR_LOG"); then
             printf "%s%s%s %sinstalled successfully.%s\n" "${BLD}" "${CGR}" "$aur_package" "${CBL}" "${CNC}"
         else
-            printf "%s%s%s %sinstallation failed. Check %sRiceError.log %sfor details.%s\n" \
+            printf "%s%s%s %sinstallation failed. Check %sInstallerError.log %sfor details.%s\n" \
                    "${BLD}" "${CRE}" "$aur_package" "${CRE}" "${CBL}" "${CRE}" "${CNC}"
             log_error "Failed to install AUR package: $aur_package"
         fi
@@ -232,6 +269,30 @@ printf "Setting up BSPWM and sxhkd configuration.\n"
 chmod +x ~/.config/bspwm/bspwmrc
 chmod +x ~/.config/bspwm/src/config/sxhkdrc
 
+########## --------- Changing zsh ---------- ##########
+
+# Comprobar si zsh está instalado
+if ! command -v zsh &>/dev/null; then
+    printf "Installing zsh...\n"
+    sudo pacman -S zsh --noconfirm || { printf "%s%sFailed to install zsh!%s\n" "${BLD}" "${CRE}" "${CNC}"; exit 1; }
+    printf "%s%sZsh has been installed successfully!%s\n" "${BLD}" "${CGR}" "${CNC}"
+else
+    printf "%s%sZsh is already installed!%s\n" "${BLD}" "${CGR}" "${CNC}"
+fi
+
+# Instalar Oh My Zsh
+if [ ! -d "$HOME/.oh-my-zsh" ]; then
+    printf "Installing Oh My Zsh...\n"
+    git clone https://github.com/ohmyzsh/ohmyzsh.git "$HOME/.oh-my-zsh" || { printf "%s%sFailed to clone Oh My Zsh repository!%s\n" "${BLD}" "${CRE}" "${CNC}"; exit 1; }
+    cp "$HOME/.oh-my-zsh/templates/zshrc.zsh-template" "$HOME/.zshrc"
+    cp "$HOME/.zshrc" "$HOME/.zshrc.orig"
+    printf "%s%sOh My Zsh has been installed successfully!%s\n" "${BLD}" "${CGR}" "${CNC}"
+else
+    printf "%s%sOh My Zsh is already installed!%s\n" "${BLD}" "${CGR}" "${CNC}"
+fi
+sleep 3
+clear
+
 ########## --------- Changing shell to zsh ---------- ##########
 
 printf "Changing default shell to zsh\n"
@@ -242,7 +303,7 @@ printf "Changing default shell to zsh\n"
         if chsh -s /usr/bin/zsh 2> >(tee -a "$ERROR_LOG"); then
             printf "\n%s[%sOK%s%s] Shell changed to zsh successfully!%s\n\n" "${BLD}" "${CGR}" "${CNC}" "${BLD}" "${CNC}"
         else
-            printf "%s%sError changing your shell to zsh. Please check %sRiceError.log%s for details%s\n\n" \
+            printf "%s%sError changing your shell to zsh. Please check %sInstallerError.log%s for details%s\n\n" \
                    "${BLD}" "${CRE}" "${CYE}" "${CRE}" "${CNC}"
             log_error "Failed to change shell to zsh"
         fi
@@ -255,12 +316,20 @@ clear
 ########## --------- exit ---------- ##########
 
 # Clean up: Remove the cloned repository and the installer script
-echo "Cleaning up temporary files...\n"
+echo "Cleaning up temporary files..."
 
 # Eliminar el directorio clonado
 rm -rf "$HOME/bspwm_theme"
 
-echo "Cleanup completed!\n"
+echo "Cleanup completed!"
+
+# Eliminar InstallerError.log si está vacío
+if [ ! -s InstallerError.log ]; then
+    rm InstallerError.log
+    printf "No errors found, InstallerError.log has been removed.\n"
+else
+    printf "Errors were logged in InstallerError.log. Please review them.\n"
+fi
 
 printf "Installation is complete\n"
 
