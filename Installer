@@ -63,7 +63,7 @@ dependencias=(alacritty base-devel bat brightnessctl bspwm dunst eza feh gvfs-mt
                 redshift rofi rustup sxhkd ttf-inconsolata ttf-jetbrains-mono ttf-jetbrains-mono-nerd \
                 ttf-joypixels ttf-terminus-nerd ttf-ubuntu-mono-nerd ueberzug webp-pixbuf-loader xclip xdg-user-dirs \
                 xdo xdotool xsettingsd xorg-xdpyinfo xorg-xkill xorg-xprop xorg-xrandr xorg-xsetroot \
-                xorg-xwininfo yazi jdk-openjdk xz bzip2 p7zip lbzip2 lrzip arj lzop cpio unrar lxappearance rustc cargo)
+                xorg-xwininfo yazi jdk-openjdk xz bzip2 p7zip lbzip2 lrzip arj lzop cpio unrar lxappearance rustc cargo libxcb libx11 xcb-util)
 
 printf "%s%sChecking for required packages...%s\n\n" "${BLD}" "${CBL}" "${CNC}"
 
@@ -129,6 +129,32 @@ done
 
 sleep 3
 clear
+
+########## ---------- Installing Eww ---------- ##########
+
+printf "Installing Eww...\n"
+
+# Clonar el repositorio de Eww y compilarlo desde el código fuente
+if [ ! -d "$HOME/eww" ]; then
+    git clone https://github.com/elkowar/eww "$HOME/eww" || {
+        printf "%s%sError: Failed to clone Eww repository!%s\n" "${BLD}" "${CRE}" "${CNC}"
+        exit 1
+    }
+else
+    printf "%s%sEww repository already cloned, updating...%s\n" "${BLD}" "${CGR}" "${CNC}"
+    cd "$HOME/eww" && git pull
+fi
+
+# Cambiar al directorio del repositorio y construir el proyecto
+cd "$HOME/eww" || exit 1
+if ! cargo build --release --no-default-features --features x11; then
+    printf "%s%sError: Failed to build Eww! Please check the log.%s\n" "${BLD}" "${CRE}" "${CNC}"
+    exit 1
+fi
+
+# Hacer que el binario sea ejecutable
+sudo mv ./target/release/eww /usr/local/bin/ --noconfirm
+chmod +x "./target/release/eww"
 
 ########## ---------- Preparing Folders ---------- ##########
 
@@ -267,31 +293,6 @@ printf "\n%s%sAll AUR dependencies checked and processed.%s\n" "${BLD}" "${CGR}"
 
 sleep 3
 clear
-
-########## ---------- Installing Eww ---------- ##########
-
-printf "Installing Eww...\n"
-
-# Clonar el repositorio de Eww y compilarlo desde el código fuente
-if [ ! -d "$HOME/eww" ]; then
-    git clone https://github.com/elkowar/eww "$HOME/eww" || {
-        printf "%s%sError: Failed to clone Eww repository!%s\n" "${BLD}" "${CRE}" "${CNC}"
-        exit 1
-    }
-else
-    printf "%s%sEww repository already cloned, updating...%s\n" "${BLD}" "${CGR}" "${CNC}"
-    cd "$HOME/eww" && git pull
-fi
-
-# Cambiar al directorio del repositorio y construir el proyecto
-cd "$HOME/eww" || exit 1
-if ! cargo build --release --no-default-features --features x11; then
-    printf "%s%sError: Failed to build Eww! Please check the log.%s\n" "${BLD}" "${CRE}" "${CNC}"
-    exit 1
-fi
-
-# Hacer que el binario sea ejecutable
-chmod +x "$HOME/eww/target/release/eww"
 
 ########## ---------- Setting up BSPWM and OpenApps ---------- ##########
 
