@@ -3,7 +3,7 @@
 options=(
     ""
     ""
-    ""
+    "󰈆"
     ""
     ""
 )
@@ -25,7 +25,7 @@ case $chosen in
     "")
         systemctl reboot
         ;;
-    "")
+    "󰈆")
         bspc quit
         ;;
 esac
