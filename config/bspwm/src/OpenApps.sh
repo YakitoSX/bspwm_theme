@@ -15,50 +15,47 @@ case "$1" in
     --menu)
         rofi -show drun -theme "$HOME"/.config/bspwm/src/rofi-themes/Launcher.rasi 
         ;;
-    --rice)
-        RiceSelector
-        ;;
-    --terminal)
-        Term --terminal
+    --xdg-terminal)
+        xdg-terminal
         ;;
     --floating)
-        Term --floating
+        xdg-terminal --floating
         ;;
     --update)
-        Term --update 
+        xdg-terminal --update 
         ;;
     --checkupdates)
-        Term --checkupdates
+        xdg-terminal --checkupdates
         ;;
     --netmanager)
 		NetManagerDM
 		;;
 	--bluetooth)
-		rofi-bluetooth
+		"$HOME"/.config/bspwm/src/rofi-bluetooth.sh
 		;;
 	--clipboard)
 		rofi -modi "clipboard:greenclip print" -theme "$HOME"/.config/bspwm/src/rofi-themes/Clipboard.rasi -show clipboard -run-command '{cmd}'
 		;;
 	--screenshot)
-		ScreenShoTer
+		"$HOME"/.config/bspwm/src/ScreenShoTer.sh
 		;;
 	--powermenu)
         PowerMenu
         ;;
     --android)
-		AndroidMount
+		"$HOME"/.config/bspwm/src/AndroidMount.sh
 		;;
     --ranger)
-        Term --ranger
+        xdg-terminal --ranger
         ;;
     --nvim)
-        Term --nvim
+        xdg-terminal --nvim
         ;;
     --music)
-        Term --music
+        xdg-terminal --music
         ;;
     --fetch)
-        Term --fetch
+        xdg-terminal --fetch
         ;;
         # Apps
     --filemanager)
@@ -68,13 +65,7 @@ case "$1" in
         firefox
         ;;
     --editor)
-        geany
-        ;;
-    --telegram)
-        telegram-desktop
-        ;;
-    --whats)
-        whatsdesk --disable-gpu
+        gedit
         ;;
     --soundcontrol)
         pavucontrol
