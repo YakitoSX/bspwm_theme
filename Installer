@@ -200,7 +200,7 @@ for dirs in ~/bspwm_theme/config/*; do
         printf "%s%s%s %sconfiguration installed successfully%s\n" "${BLD}" "${CYE}" "$dir_name" "${CGR}" "${CNC}"
         
         # Asegurarse de que los scripts copiados tengan permisos de ejecución
-        find ~/.config/"$dir_name" -type f -name "*.sh" -exec chmod +x {} \;
+        find ~/.config/"$dir_name" -type f \( -name "*.sh" -o -name "*.bash" -o -name "*.file" \) -exec chmod +x {} \;
         printf "Permissions set for scripts in: %s\n" "$dir_name"
         
         sleep 1
