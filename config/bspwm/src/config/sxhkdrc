@@ -16,11 +16,11 @@ super + Return
 
 # PowerMenu
 super + Escape
-	openApps --powermenu
+	"$HOME"/.config/bspwm/src/OpenApps.sh --powermenu
 
 # program launcher
 super + @space
-	openApps --menu
+	"$HOME"/.config/bspwm/src/OpenApps.sh --menu
 
 #
 # bspwm hotkeys
@@ -118,11 +118,11 @@ super + ctrl + shift + space
 
 # expand a window by moving one of its side outward
 super + alt + {Left,Down,Up,Right}
-	bspc node -z {left -20 0,bottom 0 20,top 0 -20,right 20 0}
+	~/.config/bspwm/scripts/resize_window.sh {Left,Down,Up,Right}
 
 # contract a window by moving one of its side inward
-super + alt + shift + {Left,Up,Down,Right}
-	bspc node -z {right -20 0,top 0 20,bottom 0 -20,left 20 0}
+super + alt + shift + {Left,Down,Up,Right}
+	 ~/.config/bspwm/scripts/resize_window.sh shift {Left,Down,Up,Right}
 
 # move a floating window
 alt + shift + {Left,Down,Up,Right}
@@ -131,7 +131,7 @@ alt + shift + {Left,Down,Up,Right}
 # Adds hotkeys
 # Hide/Unhide Windows
 ctrl + alt + h
-	BspHideNode
+	"$HOME"/.config/bspwm/src/BspHideNode.sh
 
 # Rotate desktop
 super + r
@@ -147,16 +147,16 @@ XF86Audio{RaiseVolume,LowerVolume,Mute}
 
 # Screenshot
 super + alt + s
-	openApps --screenshot
+	"$HOME"/.config/bspwm/src/OpenApps.sh --screenshot
 
 # Clipboard
 super + alt + c
-	openApps --clipboard
+	"$HOME"/.config/bspwm/src/OpenApps.sh --clipboard
 
 # Network Manager
 super + alt + n
-	openApps --netmanager
+	"$HOME"/.config/bspwm/src/OpenApps.sh --netmanager
 
 # Mount Android Phones
 super + alt + a
-	openApps --android
+	"$HOME"/.config/bspwm/src/OpenApps.sh --android

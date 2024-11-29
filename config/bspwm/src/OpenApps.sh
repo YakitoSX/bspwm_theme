@@ -22,10 +22,10 @@ case "$1" in
         xdg-terminal --floating
         ;;
     --update)
-        xdg-terminal --update 
+        "$HOME"/.config/bspwm/src/updates.sh --update-system 
         ;;
     --checkupdates)
-        xdg-terminal --checkupdates
+         "$HOME"/.config/bspwm/src/updates.sh --get-updates
         ;;
     --netmanager)
 		"$HOME"/.config/bspwm/src/NetManagerDM.sh
@@ -40,7 +40,7 @@ case "$1" in
 		"$HOME"/.config/bspwm/src/ScreenShoTer.sh
 		;;
 	--powermenu)
-        PowerMenu
+        	"$HOME"/.config/bspwm/src/PowerMenu.sh
         ;;
     --android)
 		"$HOME"/.config/bspwm/src/AndroidMount.sh
@@ -53,9 +53,6 @@ case "$1" in
         ;;
     --music)
         xdg-terminal --music
-        ;;
-    --fetch)
-        xdg-terminal --fetch
         ;;
         # Apps
     --filemanager)

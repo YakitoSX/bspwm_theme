@@ -13,6 +13,9 @@ CBL=$(tput setaf 4)
 BLD=$(tput bold)
 CNC=$(tput sgr0)
 
+date=$(date +%Y%m%d-%H%M%S)
+ERROR_LOG="$HOME/InstallerError.log"
+
 ########## ---------- You must not run this as root ---------- ##########
 
 if [ "$(id -u)" = 0 ]; then
@@ -27,8 +30,6 @@ if [ "$current_dir" != "$home_dir" ]; then
     printf "%s%sThe script must be executed from the HOME directory.%s\n" "${BLD}" "${CYE}" "${CNC}"
     exit 1
 fi
-
-ERROR_LOG="$HOME/InstallerError.log"
 
 log_error() {
     echo "[$(date '+%Y-%m-%d %H:%M:%S')] $1" >> "$ERROR_LOG"
@@ -109,7 +110,7 @@ clear
 
 ########## ----------Insalling fonts ---------- ##########
 
-fonts=("nerd-fonts-complete" "ttf-font-awesome")
+fonts=("nerd-fonts-complete" "ttf-font-awesome" "material-design-icons-desktop")
 
 # Instalar fuentes con yay
 for font in "${fonts[@]}"; do
@@ -182,6 +183,7 @@ if [ -d "$themes_dir" ]; then
 else
     echo "No 'themes' directory found in the repository."
 fi
+
 sleep 3
 clear
 
@@ -263,11 +265,10 @@ clear
 
 ########## ---------- Setting up BSPWM and Sxhkd ---------- ##########
 
-printf "Setting up BSPWM and sxhkd configuration.\n"
+printf "Setting up BSPWM configuration.\n"
 
-# Permissions for bspwm and sxhkd
+# Permissions for bspwm
 chmod +x ~/.config/bspwm/bspwmrc
-chmod +x ~/.config/bspwm/src/config/sxhkdrc
 
 ########## --------- Changing zsh ---------- ##########
 
