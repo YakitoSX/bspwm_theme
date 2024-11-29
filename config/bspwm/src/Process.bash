@@ -21,7 +21,7 @@
 	sleep 0.30
 
 	# Load the wallpaper.
-	feh --no-fehbg --bg-fill "${HOME}"/.config/bspwm/Theme/walls/wallpaper.webp
+	feh --no-fehbg --bg-fill "${HOME}"/.config/bspwm/Theme/walls/wallpaper-5.webp
 
 # Explanation: Why are some applications or daemons started or killed here and others in bspwmrc?
 

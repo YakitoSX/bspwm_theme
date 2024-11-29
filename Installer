@@ -63,7 +63,7 @@ dependencias=(alacritty base-devel bat brightnessctl bspwm dunst eza feh gvfs-mt
                 redshift rofi rustup sxhkd ttf-inconsolata ttf-jetbrains-mono ttf-jetbrains-mono-nerd \
                 ttf-joypixels ttf-terminus-nerd ttf-ubuntu-mono-nerd ueberzug webp-pixbuf-loader xclip xdg-user-dirs \
                 xdo xdotool xsettingsd xorg-xdpyinfo xorg-xkill xorg-xprop xorg-xrandr xorg-xsetroot \
-                xorg-xwininfo yazi zsh jdk-openjdk xz bzip2 p7zip lbzip2 lrzip arj lzop cpio unrar lxappearance)
+                xorg-xwininfo yazi zsh jdk-openjdk xz bzip2 p7zip lbzip2 lrzip arj lzop cpio unrar lxappearance rustc cargo)
 
 printf "%s%sChecking for required packages...%s\n\n" "${BLD}" "${CBL}" "${CNC}"
 
