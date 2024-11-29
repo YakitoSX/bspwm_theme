@@ -28,7 +28,7 @@ case "$1" in
         xdg-terminal --checkupdates
         ;;
     --netmanager)
-		NetManagerDM
+		"$HOME"/.config/bspwm/src/NetManagerDM.sh
 		;;
 	--bluetooth)
 		"$HOME"/.config/bspwm/src/rofi-bluetooth.sh
@@ -74,12 +74,6 @@ case "$1" in
     --KeyHelp)
 		eww -c "$WIDGET_DIR" open --toggle csheet
 		;;
-    --usercard)
-        eww -c "$WIDGET_DIR" open --toggle launchermenu
-        ;;
-    --player)
-        eww -c "$WIDGET_DIR" open --toggle music
-        ;;
     --calendar)
         eww -c "$WIDGET_DIR" open --toggle date
         ;;
