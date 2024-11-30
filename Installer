@@ -153,7 +153,7 @@ if ! cargo build --release --no-default-features --features x11; then
 fi
 
 # Hacer que el binario sea ejecutable
-chmod +x "$HOME/target/release/eww"
+chmod +x "$HOME/eww/target/release/eww"
 sudo cp $HOME/eww/target/release/eww /usr/local/bin/
 
 ########## ---------- Preparing Folders ---------- ##########
