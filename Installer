@@ -108,9 +108,9 @@ fi
 sleep 3
 clear
 
-########## ----------Insalling fonts and librewolf ---------- ##########
+########## ----------Insalling fonts ---------- ##########
 
-fonts=("nerd-fonts-complete" "ttf-font-awesome" "material-design-icons-desktop" "librewolf")
+fonts=("nerd-fonts-complete" "ttf-font-awesome" "material-design-icons-desktop")
 
 # Instalar fuentes con yay
 for font in "${fonts[@]}"; do
@@ -356,12 +356,12 @@ clear
 # Clean up: Remove the cloned repository and the installer script
 echo "Cleaning up temporary files..."
 
-# Eliminar el directorio clonado
+# Remove bspwm_theme directory
 rm -rf "$HOME/bspwm_theme"
 
 echo "Cleanup completed!"
 
-# Eliminar InstallerError.log si está vacío
+# Remove InstallerError.log
 if [ ! -s $HOME/InstallerError.log ]; then
     rm -f $HOME/InstallerError.log
     printf "No errors found, InstallerError.log has been removed.\n"
@@ -381,8 +381,8 @@ printf "%sThe installation is complete, you %sneed%s to restart your machine.%s\
 		case $yn in
 			[Yy]* )
 				printf "\n%s%sRebooting now...%s\n" "${BLD}" "${CGR}" "${CNC}"
-				# Eliminar el archivo del instalador
-				rm -f $HOME/Installer  # Esto eliminará el script del instalador
+				# Remove installer file
+				rm -f $HOME/Installer
 				sleep 3
 				reboot
 				break
