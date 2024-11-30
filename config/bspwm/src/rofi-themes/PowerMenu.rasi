@@ -68,12 +68,12 @@ message {
 
 listview {
     enabled:                     true;
-    columns:                     0;
+    columns:                     4;
     lines:                       1;
     cycle:                       true;
     dynamic:                     true;
     scrollbar:                   false;
-    layout:                      horizontal;
+    layout:                      vertical;
     reverse:                     false;
     fixed-height:                true;
     fixed-columns:               true;

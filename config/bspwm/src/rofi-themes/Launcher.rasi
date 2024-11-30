@@ -1,6 +1,5 @@
 * {
     font:   "JetBrainsMono NF Bold 9";
-
     background-color:   transparent;
     text-color:         #E6E6E6;
     background: #1a1b26;
@@ -14,6 +13,13 @@
     margin:     0px;
     padding:    0px;
     spacing:    0px;
+}
+
+configuration {
+    modi:  "drun";
+    icon-theme:  "Papirus-Dark";
+    application-fallback-icon: 	"Adwaita";
+    show-icons:  true;
 }
 
 window {
@@ -79,6 +85,7 @@ element {
     padding:        8px 16px;
     spacing:        8px;
     border-radius:  16px;
+    children: [element-icon, element-text];
 }
 
 element normal active {
