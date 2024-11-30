@@ -57,13 +57,12 @@ clear
 
 printf "Installing needed packages..\n"
 
-dependencias=(alacritty base-devel bat brightnessctl bspwm dunst eza feh gvfs-mtp firefox git imagemagick jq \
-                jgmenu libwebp maim neovim npm pamixer pacman-contrib \
-                papirus-icon-theme picom playerctl polybar polkit-gnome python-gobject \
+dependencias=(alacritty arj base-devel bat brightnessctl bspwm bzip2 cargo cpio dunst eza feh firefox gedit gvfs-mtp git imagemagick jq \
+                libwebp maim npm pamixer pacman-contrib papirus-icon-theme picom playerctl polybar polkit-gnome python-gobject \
                 redshift rofi rustup sxhkd ttf-inconsolata ttf-jetbrains-mono ttf-jetbrains-mono-nerd \
                 ttf-joypixels ttf-terminus-nerd ttf-ubuntu-mono-nerd ueberzug webp-pixbuf-loader xclip xdg-user-dirs \
                 xdo xdotool xsettingsd xorg-xdpyinfo xorg-xkill xorg-xprop xorg-xrandr xorg-xsetroot \
-                xorg-xwininfo yazi jdk-openjdk xz bzip2 p7zip lbzip2 lrzip arj lzop cpio unrar lxappearance rustc cargo libxcb libx11 xcb-util)
+                xorg-xwininfo yazi jdk-openjdk xz  p7zip lbzip2 lrzip lzop unrar lxappearance rustc libxcb libx11 xcb-util)
 
 printf "%s%sChecking for required packages...%s\n\n" "${BLD}" "${CBL}" "${CNC}"
 
@@ -305,7 +304,33 @@ chmod +x ~/.config/bspwm/src/OpenApps
 sleep 3
 clear
 
-########## --------- Changing zsh ---------- ##########
+########## --------- Changing zsh and configure Alacritty as the default terminal ---------- ##########
+
+# Configure Alacritty as the default terminal using update-alternatives
+if command -v update-alternatives &>/dev/null; then
+    echo "Setting Alacritty as the default terminal..."
+
+    # Add Alacritty to the alternatives system if not already configured
+    sudo update-alternatives --install /usr/bin/x-terminal-emulator x-terminal-emulator /usr/bin/alacritty 50
+
+    # Select Alacritty as the default terminal
+    sudo update-alternatives --config x-terminal-emulator
+else
+    echo "update-alternatives not found, unable to set Alacritty as the default terminal."
+fi
+
+# Create an alias for xdg-terminal (if it doesn't exist)
+echo "Creating an alias for xdg-terminal..."
+
+if [ ! -f /usr/local/bin/xdg-terminal ]; then
+    sudo bash -c 'echo "#!/bin/bash\nalacritty -e \"\$@\"" > /usr/local/bin/xdg-terminal'
+    sudo chmod +x /usr/local/bin/xdg-terminal
+    echo "xdg-terminal alias created successfully."
+else
+    echo "xdg-terminal alias already exists."
+fi
+
+sleep 3
 
 # Comprobar si zsh está instalado
 if ! command -v zsh &>/dev/null; then
