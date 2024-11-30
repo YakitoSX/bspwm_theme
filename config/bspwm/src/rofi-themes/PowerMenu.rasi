@@ -27,6 +27,8 @@ mainbox {
     padding:                     30px;
     background-color:            @background;
     children:                    [ "inputbar", "listview" ];
+    layout:                      horizontal;
+    align:                       center;
 }
 
 inputbar {
@@ -66,12 +68,12 @@ message {
 
 listview {
     enabled:                     true;
-    columns:                     5;
+    columns:                     0;
     lines:                       1;
     cycle:                       true;
     dynamic:                     true;
     scrollbar:                   false;
-    layout:                      vertical;
+    layout:                      horizontal;
     reverse:                     false;
     fixed-height:                true;
     fixed-columns:               true;

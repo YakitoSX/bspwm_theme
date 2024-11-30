@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 options=(
+    ""
     "󰈆"
     ""
     ""
@@ -25,5 +26,8 @@ case $chosen in
         ;;
     "󰈆")
         bspc quit
+        ;;
+    "")
+        systemctl suspend
         ;;
 esac
