@@ -7,8 +7,6 @@
 # Bspwm border		# Normal border color	# Focused border color
 BORDER_WIDTH="0"	NORMAL_BC="#414868"		FOCUSED_BC="#bb9af7"
 
-# Fade true|false	# Shadows true|false	# Corner radius		# Shadow color			# Animations true|false
-P_FADE="true"		P_SHADOWS="true"		P_CORNER_R="6"		SHADOW_C="#000000"		ANIMATIONS="true"
 
 # (Tokyo Night) colorscheme
 bg="#1a1b26"  fg="#c0caf5"
@@ -29,37 +27,6 @@ set_bspwm_config() {
 	bspc config normal_border_color "${NORMAL_BC}"
 	bspc config focused_border_color "${FOCUSED_BC}"
 	bspc config presel_feedback_color "${blue}"
-}
-
-# Set compositor configuration
-set_picom_config() {
-	picom_conf_file="$HOME/.config/bspwm/src/config/picom.conf"
-	picom_rules_file="$HOME/.config/bspwm/src/config/picom-rules.conf"
-
-	# Configuración de picom
-	sed -i "$picom_conf_file" \
-		-e "s/shadow = .*/shadow = ${P_SHADOWS};/" \
-		-e "s/shadow-color = .*/shadow-color = \"${SHADOW_C}\"/" \
-		-e "s/fading = .*/fading = ${P_FADE};/" \
-		-e "s/corner-radius = .*/corner-radius = ${P_CORNER_R}/"
-
-	# Cambiar opacidad para ventanas inactivas
-	sed -i "$picom_rules_file" \
-		-e "s/opacity = .*/opacity = 1;/"
-
-	# Añadir regla para cambiar la opacidad de aplicaciones inactivas
-	sed -i "$picom_rules_file" \
-		-e '/# Inactive windows opacity/a\opacity = 0.75;' \
-		-e '/# Exclude polybar from transparency/a\window_type = "dock" opacity = 1;'
-
-	# Si las animaciones están habilitadas
-	if [[ "$ANIMATIONS" = "true" ]]; then
-		sed -i "$picom_rules_file" \
-			-e '/picom-animations/c\@include "picom-animations.conf"'
-	else
-		sed -i "$picom_rules_file" \
-			-e '/picom-animations/c\#@include "picom-animations.conf"'
-	fi
 }
 
 # Set dunst config

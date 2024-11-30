@@ -108,9 +108,9 @@ fi
 sleep 3
 clear
 
-########## ----------Insalling fonts ---------- ##########
+########## ----------Insalling fonts and librewolf ---------- ##########
 
-fonts=("nerd-fonts-complete" "ttf-font-awesome" "material-design-icons-desktop")
+fonts=("nerd-fonts-complete" "ttf-font-awesome" "material-design-icons-desktop" "librewolf")
 
 # Instalar fuentes con yay
 for font in "${fonts[@]}"; do
@@ -153,7 +153,7 @@ if ! cargo build --release --no-default-features --features x11; then
 fi
 
 # Hacer que el binario sea ejecutable
-sudo mv ./target/release/eww /usr/local/bin/ --noconfirm
+sudo mv ./target/release/eww /usr/local/bin/
 chmod +x "./target/release/eww"
 
 ########## ---------- Preparing Folders ---------- ##########
