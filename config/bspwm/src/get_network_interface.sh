@@ -19,5 +19,14 @@ else
   fi
 fi
 
-sed -i "/^sys_network_interface = /c\\$interface_line" "$config_file" || echo "$interface_line" >> "$config_file"
-sed -i "/^sys_connection_type = /c\\$connection_type_line" "$config_file" || echo "$connection_type_line" >> "$config_file"
+if grep -q "^sys_network_interface = " "$config_file"; then
+  sed -i "/^sys_network_interface = /c\\$interface_line" "$config_file"
+else
+  echo "$interface_line" >> "$config_file"
+fi
+
+if grep -q "^sys_connection_type = " "$config_file"; then
+  sed -i "/^sys_connection_type = /c\\$connection_type_line" "$config_file"
+else
+  echo "$connection_type_line" >> "$config_file"
+fi

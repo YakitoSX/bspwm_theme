@@ -81,7 +81,7 @@ for paquete in "${dependencias[@]}"; do
         sleep 1
     fi
 done
-sleep 3
+sleep 5
 clear
 
 ########## ---------- Installing Yay ---------- ##########
