@@ -1,8 +1,5 @@
 #!/usr/bin/env bash
 
-# Terminate or reload existing processes if necessary.
-. "${HOME}"/.config/bspwm/src/Process.bash
-
 # Vars config
 # Bspwm border		# Normal border color	# Focused border color
 BORDER_WIDTH="0"	NORMAL_BC="#414868"		FOCUSED_BC="#bb9af7"

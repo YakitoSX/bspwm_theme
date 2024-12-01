@@ -1,80 +1,159 @@
+/* General Date Styles */
 .date {
   background-color: $bg;
   color: $fg;
   border-radius: 0.5rem;
+  padding: 1rem;
+  margin: 0.5rem;
 }
 
+/* Timebox Styling */
 .timebox {
   margin: 1.2rem 3.5rem 0 3.5rem;
 
   .time-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+
     .content {
-      font-family: JetBrainsMono NF;
-      font-weight: Bolder;
+      font-family: 'JetBrainsMono NF', monospace;
+      font-weight: bolder;
       font-size: 3.6rem;
       color: $fg;
+      margin-right: 10px;
     }
 
     .divider {
       margin: 0.2rem 15px;
       padding: 0px 1px;
       background: linear-gradient($red, $magenta, $blue, $cyan);
+      height: 1px;
     }
   }
 
   .date-container {
-    font-family: Inconsolata SemiCondensed Medium;
-    font-weight: Bold;
+    font-family: 'Inconsolata SemiCondensed Medium', monospace;
+    font-weight: bold;
     font-size: 1rem;
     color: $fg;
     margin: 5px 0;
+    text-align: center;
   }
 }
 
+/* Calendar Box Styling */
 .cal-box {
-  font-family: Cantarell;
-  font-weight: Bold;
+  font-family: Cantarell, sans-serif;
+  font-weight: bold;
   font-size: 0.9rem;
-  background-color: $bg;
-  border-radius: 0.5rem;
-  padding: 0 1rem 0.2rem;
-  color: $fg;
   background-color: $bg-alt;
-  margin: 0.9rem 0.6rem 0.9rem 0.6rem;
+  border-radius: 0.5rem;
+  padding: 0.5rem 1rem;
+  color: $fg;
+  margin: 0.9rem 0.6rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 
   .cal {
     background-color: inherit;
-    padding: 0.5rem 0.15rem 0.2rem;
+    padding: 0.5rem;
     margin-left: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
-    &>* {
-      border: solid 0px transparent;
+    /* Styling for individual calendar days */
+    .day {
+      padding: 0.5rem;
+      border-radius: 0.5rem;
+      transition: background-color 0.3s ease;
     }
 
-    &.highlight {
-      padding: 10rem;
+    .day:hover {
+      background-color: $bg-hover;
+    }
+
+    .highlight {
+      background-color: $cyan;
+      color: $bg;
+      font-weight: bold;
+      border-radius: 0.5rem;
+      padding: 0.5rem;
     }
   }
 }
 
-calendar:selected {
-  color: $magenta;
+/* Calendar-specific styles */
+calendar {
+  &.selected {
+    color: $magenta;
+  }
+
+  &.header {
+    color: $magenta;
+    font-weight: bold;
+    font-size: 1.2rem;
+  }
+
+  &.button {
+    color: $fg;
+    padding: 0.2rem 0.5rem;
+    border-radius: 0.3rem;
+    margin: 0.2rem;
+    transition: background-color 0.3s ease;
+  }
+
+  &.button:hover {
+    background-color: $bg-hover;
+  }
+
+  &.highlight {
+    color: $green;
+    font-weight: bold;
+  }
+
+  &.indeterminate {
+    color: $red;
+  }
 }
 
-calendar.header {
-  color: $magenta;
-  font-weight: bold;
+/* Hover and active states */
+.calendar-day:hover {
+  background-color: $bg-hover;
 }
 
-calendar.button {
-  color: $fg;
+.calendar-day.selected {
+  background-color: $cyan;
+  color: $bg;
 }
 
-calendar.highlight {
-  color: $green;
-  font-weight: bold;
+/* Styling for the overall calendar container */
+.calendar-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: $bg;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  width: 100%;
 }
 
-calendar:indeterminate {
-  color: $red;
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .timebox {
+    margin: 1rem;
+  }
+
+  .cal-box {
+    width: 90%;
+    margin: 1rem 0.5rem;
+  }
+
+  .date-container {
+    font-size: 0.9rem;
+  }
 }

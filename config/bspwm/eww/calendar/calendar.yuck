@@ -1,28 +1,25 @@
-;; Define los "pollers" para obtener la fecha y hora
-(defpoll completeday :interval "1h" "date '+%A, %d %B'")  ;; Día completo
-(defpoll lithour :interval "30m" "date +%H")               ;; Hora
-(defpoll litmin :interval "30s" "date +%M")                 ;; Minutos
+(defpoll completeday :interval "1h" "date '+%A, %d %B'")
+(defpoll lithour :interval "30m" "date +%H")
+(defpoll litmin :interval "30s" "date +%M")
+(defpoll calendar_day :interval "10h" "date '+%d'")
+(defpoll calendar_month :interval "10h" "date '+%m'")
+(defpoll calendar_year :interval "10h" "date '+%Y'")
 
-(defpoll calendar_day :interval "10h" "date '+%d'")        ;; Día del calendario
-(defpoll calendar_month :interval "10h" "date '+%m'")      ;; Mes
-(defpoll calendar_year :interval "10h" "date '+%Y'")       ;; Año
-
-;; Definir el widget de la hora
 (defwidget time []
   (box :class "timebox" :orientation "v" :space-evenly false
     (box :class "time-container" :orientation "h" :space-evenly false :halign "center" :valign "center"
-      (label :class "content" :text "${lithour}")   ;; Muestra la hora
-    (divider)                                       ;; Separador
-      (label :class "content" :text "${litmin}")    ;; Muestra los minutos
+      (label :class "content" :text "${lithour}")
+    )
+    (box :class "divider" :orientation "h" :height "1px" :background "#888")
+    (label :class "content" :text "${litmin}")
     )
 
     (box :class "date-container" :orientation "h" :space-evenly true :halign "center"
-      (label :text "${completeday}" :on-click "eww open date") ;; Muestra el día
+      (label :text "${completeday}" :on-click "eww open date")
     )
   )
 )
 
-;; Definir el widget del calendario
 (defwidget cal []
   (box :class "cal-box"
        :orientation "v"
@@ -35,26 +32,23 @@
   )
 )
 
-;; Define el widget para la fecha completa (hora + calendario)
 (defwidget date []
   (box :class "date"
        :orientation "v"
        :space-evenly false
-    (time)   ;; Hora
-    (cal)    ;; Calendario
+    (time)
+    (cal)
   )
 )
 
-;; Definir la ventana para el calendario con la geometría ajustada
 (defwindow date
-  :geometry (geometry :x "0px" :y "100%" :anchor "top left") ;; Posicionar justo debajo de la hora
+  :geometry (geometry :x "0px" :y "50px" :anchor "top left")  ;; Ajusta la posición en píxeles
   :wm-ignore true
-  (date)  ;; Mostrar el contenido (hora + calendario)
+  (date)
 )
 
-;; Comando para cerrar el calendario cuando haces clic fuera de él
 (defwindow close_calendar
-  :geometry (geometry :x "0px" :y "0px")  ;; Invisible o mínima
+  :geometry (geometry :x "0px" :y "0px")
   :wm-ignore true
-  (label :class "close_label" :on-click "eww close date") ;; Cerrar la ventana
+  (label :class "close_label" :on-click "eww close date")
 )
