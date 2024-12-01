@@ -60,7 +60,7 @@ printf "Installing needed packages..\n"
 dependencias=(alacritty arj base-devel bat brightnessctl bspwm bzip2 cargo cpio dunst eza feh firefox gedit gvfs-mtp git imagemagick jdk-openjdk \
                 jq lbzip2 libwebp libxcb libx11 lrzip lxappearance lzop maim npm p7zip pamixer pacman-contrib \
 		papirus-icon-theme picom playerctl polybar polkit-gnome python-gobject \
-                redshift rofi rustc sxhkd ttf-inconsolata ttf-jetbrains-mono ttf-jetbrains-mono-nerd \
+                redshift rofi sxhkd ttf-inconsolata ttf-jetbrains-mono ttf-jetbrains-mono-nerd \
                 ttf-joypixels ttf-terminus-nerd ttf-ubuntu-mono-nerd ueberzug unrar webp-pixbuf-loader xcb-util xclip xdg-user-dirs \
                 xdo xdotool xsettingsd xorg-xdpyinfo xorg-xkill xorg-xprop xorg-xrandr xorg-xsetroot xorg-xwininfo xz yazi)
 
@@ -82,6 +82,17 @@ for paquete in "${dependencias[@]}"; do
     fi
 done
 sleep 5
+clear
+
+########## ---------- Installing Rust ---------- ##########
+
+printf "Install Rust\n"
+
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+
+printf "%s%sRust has been installed successfully!%s\n" "${BLD}" "${CGR}" "${CNC}"
+
+sleep 3
 clear
 
 ########## ---------- Installing Yay ---------- ##########
