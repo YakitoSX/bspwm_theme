@@ -193,13 +193,12 @@ if [ -d "$themes_dir" ]; then
     echo "Found 'themes' directory, moving themes to appropriate locations..."
     
     # Crear las carpetas de destino si no existen
-    [ ! -d "$HOME/.themes" ] && mkdir -p "$HOME/.themes"
     [ ! -d "$HOME/.icons" ] && mkdir -p "$HOME/.icons"
     
     # Mover los temas GTK que están dentro de 'GTK_THEME'
     if [ -d "$themes_dir/GTK_THEME" ]; then
         echo "Moving GTK themes..."
-        mv "$themes_dir/GTK_THEME"/* "$HOME/.themes/"
+        sudo mv "$themes_dir/GTK_THEME"/* /usr/share/themes/
         echo "Moved GTK themes to $HOME/.themes/"
     else
         echo "No GTK themes found in the 'GTK_THEME' directory."

@@ -14,6 +14,9 @@ blackb="#414868"  redb="#f7768e"  greenb="#9ece6a"  yellowb="#e0af68"
 blue="#7aa2f7"   magenta="#bb9af7"   cyan="#7dcfff"   white="#a9b1d6"
 blueb="#7aa2f7"  magentab="#bb9af7"  cyanb="#7dcfff"  whiteb="#c0caf5"
 
+# Gtk theme vars
+gtk_theme="TokyoNight-zk"	gtk_icons="Papirus-Dark"
+
 # Set bspwm configuration
 set_bspwm_config() {
 	bspc config border_width ${BORDER_WIDTH}
@@ -100,6 +103,26 @@ set_launchers() {
 EOF
 }
 
+set_appearance() {
+	# Set the gtk theme corresponding to rice
+	if pidof -q xsettingsd; then
+		sed -i "$HOME"/.config/bspwm/src/config/xsettingsd \
+			-e "s|Net/ThemeName .*|Net/ThemeName \"$gtk_theme\"|" \
+			-e "s|Net/IconThemeName .*|Net/IconThemeName \"$gtk_icons\"|" \
+	else
+		sed -i "$HOME"/.config/gtk-3.0/settings.ini \
+			-e "s/gtk-theme-name=.*/gtk-theme-name=$gtk_theme/" \
+			-e "s/gtk-icon-theme-name=.*/gtk-icon-theme-name=$gtk_icons/" \
+
+		sed -i "$HOME"/.gtkrc-2.0 \
+			-e "s/gtk-theme-name=.*/gtk-theme-name=\"$gtk_theme\"/" \
+			-e "s/gtk-icon-theme-name=.*/gtk-icon-theme-name=\"$gtk_icons\"/" \
+	fi
+
+	# Reload daemon and apply gtk theme
+	pidof -q xsettingsd && killall -HUP xsettingsd
+}
+
 # Launch theme
 launch_theme() {
 
@@ -120,4 +143,5 @@ set_picom_config
 set_dunst_config
 set_eww_colors
 set_launchers
+set_appearance
 launch_theme
