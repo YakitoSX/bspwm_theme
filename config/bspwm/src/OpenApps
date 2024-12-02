@@ -9,7 +9,7 @@
 #	Author: z0mbi3
 #	url:    https://github.com/gh0stzk/dotfiles
 
-WIDGET_DIR="$HOME/.config/bspwm/eww"
+WIDGET_DIR="$HOME/.config/eww"
 
 case "$1" in
     --menu)
@@ -68,6 +68,9 @@ case "$1" in
     --KeyHelp)
 		eww -c "$WIDGET_DIR" open --toggle csheet
 		;;
+    --calendar)
+        eww -c "$WIDGET_DIR" open --toggle date
+        ;;
     *)
         echo "Invalid Option"
         ;;
