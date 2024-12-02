@@ -116,7 +116,7 @@ printf "Installing AUR dependencies\n"
 # Instalar fuentes con yay
 for aur_package in "${aur_dependencies[@]}"; do
     if ! is_installed "$aur_package"; then
-        if yay -S --skipreview --noconfirm "$aur_package" 2> >(tee -a "$ERROR_LOG"); then
+        if yay -S --noconfirm "$aur_package" 2> >(tee -a "$ERROR_LOG"); then
             printf "%s%s%s %shas been installed succesfully.%s\n" "${BLD}" "${CYE}" "$aur_package" "${CBL}" "${CNC}"
         else
             printf "%s%s%s %shas not been installed correctly. See %sInstallerError.log %sfor more details.%s\n" "${BLD}" "${CYE}" "$aur_package" "${CRE}" "${CBL}" "${CRE}" "${CNC}"
