@@ -62,7 +62,7 @@ set_dunst_config() {
 
 # Set eww colors
 set_eww_colors() {
-	cat >"$HOME"/.config/bspwm/eww/colors.scss <<EOF
+	cat >"$HOME"/.config/eww/colors.scss <<EOF
 \$bg: ${bg};
 \$bg-alt: #222330;
 \$fg: ${fg};
@@ -103,26 +103,6 @@ set_launchers() {
 EOF
 }
 
-set_appearance() {
-	# Set the gtk theme corresponding to rice
-	if pidof -q xsettingsd; then
-		sed -i "$HOME"/.config/bspwm/src/config/xsettingsd \
-			-e "s|Net/ThemeName .*|Net/ThemeName \"$gtk_theme\"|" \
-			-e "s|Net/IconThemeName .*|Net/IconThemeName \"$gtk_icons\"|" \
-	else
-		sed -i "$HOME"/.config/gtk-3.0/settings.ini \
-			-e "s/gtk-theme-name=.*/gtk-theme-name=$gtk_theme/" \
-			-e "s/gtk-icon-theme-name=.*/gtk-icon-theme-name=$gtk_icons/" \
-
-		sed -i "$HOME"/.gtkrc-2.0 \
-			-e "s/gtk-theme-name=.*/gtk-theme-name=\"$gtk_theme\"/" \
-			-e "s/gtk-icon-theme-name=.*/gtk-icon-theme-name=\"$gtk_icons\"/" \
-	fi
-
-	# Reload daemon and apply gtk theme
-	pidof -q xsettingsd && killall -HUP xsettingsd
-}
-
 # Launch theme
 launch_theme() {
 
@@ -139,9 +119,7 @@ launch_theme() {
 ### Apply Configurations
 
 set_bspwm_config
-set_picom_config
 set_dunst_config
 set_eww_colors
 set_launchers
-set_appearance
 launch_theme

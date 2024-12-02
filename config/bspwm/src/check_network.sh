@@ -9,15 +9,17 @@ connection_type=$(echo "$interface_info" | cut -d: -f2)
 
 if [[ -z "$interface" ]]; then
     icon=""
+    color="#FF0000"
 else
     icon=""
+    color="#00FF00"
     interface_line="sys_network_interface = $interface"
 
-    if grep -q "^sys_network_interface = " "$CONFIG_FILE"; then
-        sed -i "/^sys_network_interface = /c\\$interface_line" "$CONFIG_FILE"
+    if grep -q "^sys_network_interface = " "$config_file"; then
+        sed -i "/^sys_network_interface = /c\\$interface_line" "$config_file"
     else
-        echo "$interface_line" >> "$CONFIG_FILE"
+        echo "$interface_line" >> "$config_file"
     fi
 fi
 
-echo "%{A1:OpenApps --netmanager:}$icon%{A}"
+echo "%{F$color}%{A1:OpenApps --netmanager:}$icon%{A}%{F-}"
