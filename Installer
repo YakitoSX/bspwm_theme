@@ -62,7 +62,7 @@ dependencias=(alacritty arj base-devel bat brightnessctl bspwm bzip2 cargo cpio 
 		papirus-icon-theme picom playerctl polybar polkit-gnome python-gobject \
                 redshift rofi sxhkd ttf-inconsolata ttf-jetbrains-mono ttf-jetbrains-mono-nerd \
                 ttf-joypixels ttf-terminus-nerd ttf-ubuntu-mono-nerd ueberzug unrar webp-pixbuf-loader xcb-util xclip xdg-user-dirs \
-                xdo xdotool xsettingsd xorg-xdpyinfo xorg-xkill xorg-xprop xorg-xrandr xorg-xsetroot xorg-xwininfo xz yazi)
+                xdo xdotool xsettingsd xorg-xdpyinfo xorg-xfd xorg-xkill xorg-xprop xorg-xrandr xorg-xsetroot xorg-xwininfo xz yazi)
 
 printf "%s%sChecking for required packages...%s\n\n" "${BLD}" "${CBL}" "${CNC}"
 
@@ -109,7 +109,7 @@ clear
 
 ########## ----------Insalling aur_dependencies ---------- ##########
 
-aur_dependencies=("nerd-aur_dependencies-complete" "ttf-font-awesome" "material-design-icons-desktop" "tdrop-git" "xqp" "rofi-greenclip" "ttf-maple" "i3lock-color" "simple-mtpfs")
+aur_dependencies=("siji-git" "nerd-aur_dependencies-complete" "ttf-font-awesome" "material-design-icons-desktop" "tdrop-git" "xqp" "rofi-greenclip" "ttf-maple" "i3lock-color" "simple-mtpfs")
 
 printf "Installing AUR dependencies\n"
 
@@ -128,8 +128,6 @@ for aur_package in "${aur_dependencies[@]}"; do
         sleep 1
     fi
 done
-
-printf "\n%s%sAll AUR dependencies checked and processed.%s\n" "${BLD}" "${CGR}" "${CNC}"
 
 sleep 3
 clear
