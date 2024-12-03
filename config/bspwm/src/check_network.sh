@@ -3,26 +3,28 @@ set -euo pipefail
 
 config_file="$HOME/.config/bspwm/src/config/system.ini"
 
-interface_info=$(nmcli -t -f DEVICE,TYPE,STATE device status | grep -E 'wifi|ethernet' | grep 'connected')
+# Get information about connected interfaces
+interface_info=$(nmcli -t -f DEVICE,TYPE,STATE device status | grep -E 'wifi|ethernet' | grep 'connected' || true)
 
 if [[ -z "$interface_info" ]]; then
-    # No active interface
+    # No active interfaces
     icon=" "
     color="#FF0000"  # Red for disconnected
 else
-    # Interface is connected, check for IP address
+    # An interface is connected, check if it has an IP address
     interface=$(echo "$interface_info" | cut -d: -f1)
-    ip_address=$(nmcli device show "$interface" | grep 'IP4.ADDRESS' | awk '{print $2}')
+    ip_address=$(nmcli -g IP4.ADDRESS device show "$interface" | head -n 1 || true)
 
     if [[ -z "$ip_address" ]]; then
-        # Interface connected, but no IP address, assuming no internet
+        # Interface connected but no IP address
         icon=" "
         color="#FFFF00"  # Yellow for connected but no internet
     else
-        # Interface is connected with a valid IP address (internet available)
+        # Interface connected with internet available
         icon=" "
         color="#00FF00"  # Green for connected with internet
 
+        # Update the configuration file
         interface_line="sys_network_interface = $interface"
         if grep -q "^sys_network_interface = " "$config_file"; then
             sed -i "/^sys_network_interface = /c\\$interface_line" "$config_file"
@@ -32,4 +34,5 @@ else
     fi
 fi
 
+# Output for Polybar
 echo "%{F$color}%{A1:OpenApps --netmanager:}$icon%{A}%{F-}"
