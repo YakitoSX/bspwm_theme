@@ -22,10 +22,10 @@ case "$1" in
         xdg-terminal --floating
         ;;
     --update)
-        xdg-terminal -e "$HOME"/.config/bspwm/src/updates.sh --update-system 
+        alacritty -e "$HOME"/.config/bspwm/src/updates.sh --update-system 
         ;;
     --checkupdates)
-         xdg-terminal -e "$HOME"/.config/bspwm/src/updates.sh --get-updates
+         alacritty -e "$HOME"/.config/bspwm/src/updates.sh --get-updates
         ;;
     --netmanager)
 		"$HOME"/.config/bspwm/src/NetManagerDM.sh

@@ -17,6 +17,9 @@
 
 configuration {
     modi:  "drun";
+    display-drun: "";
+    drun-display-format: "{name}";
+    disable-history: true;
     icon-theme:  "Papirus-Dark";
     application-fallback-icon: 	"Adwaita";
     show-icons:  true;
@@ -52,7 +55,6 @@ inputbar {
 
 prompt {
     text-color: #969696;
-    str:    "";
 }
 
 entry {

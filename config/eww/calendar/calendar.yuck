@@ -11,15 +11,19 @@
 (defwidget divider []
   (box :class "divider"
        :orientation "v"
-       :space-evenly true)
+       :space-evenly true
+       :height "1px"    ;; Asegúrate de definir la altura si no tiene un valor predeterminado.
+       :background "#ccc"   ;; O cualquier color que desees para el divider
+  )
 )
 
 (defwidget time []
   (box :class "timebox" :orientation "v" :space-evenly false
     (box :class "time-container" :orientation "h" :space-evenly false :halign "center" :valign "center"
       (label :class "content" :text "${lithour}")
-    (divider)
-      (label :class "content" :text "${litmin}"))
+    )
+    (divider)   ;; Asegúrate de que el divider esté colocado correctamente aquí
+    (label :class "content" :text "${litmin}"))
 
     (box :class "date-container" :orientation "h" :space-evenly true :halign "center"
       (label :text "${completeday}"))
@@ -29,10 +33,11 @@
   (box :class "cal-box"
        :orientation "v"
        :space-evenly false
+       :height "auto"   ;; Para asegurarte de que el calendario ocupe su espacio correctamente
     (calendar :class "cal"
               :day {calendar_day ?: "1"}
               :month {calendar_month ?: "1"}
-              :year {calendar_year ?: "2023"}
+              :year {calendar_year ?: "2024"}
     )
   )
 )
@@ -42,6 +47,7 @@
        :orientation "v"
        :space-evenly false
     (time)
+    (divider)   ;; Asegúrate de colocar un divider si quieres uno entre el time y el calendar
     (cal)
   )
 )
@@ -49,4 +55,4 @@
 (defwindow date
   :geometry (geometry :x "0px" :y "8%" :anchor "top center")
   :wm-ignore true
-(date))
+  (date))

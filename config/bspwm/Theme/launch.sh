@@ -63,44 +63,36 @@ set_dunst_config() {
 # Set eww colors
 set_eww_colors() {
 	cat >"$HOME"/.config/eww/colors.scss <<EOF
-\$bg: ${bg};
-\$bg-alt: #222330;
-\$fg: ${fg};
-\$black: ${blackb};
-\$red: ${red};
-\$green: ${green};
-\$yellow: ${yellow};
-\$blue: ${blue};
-\$magenta: ${magenta};
-\$cyan: ${cyan};
-\$archicon: #0f94d2;
-EOF
+	\$bg: ${bg};
+	\$bg-alt: #222330;
+	\$fg: ${fg};
+	\$black: ${blackb};
+	\$red: ${red};
+	\$green: ${green};
+	\$yellow: ${yellow};
+	\$blue: ${blue};
+	\$magenta: ${magenta};
+	\$cyan: ${cyan};
+	\$archicon: #0f94d2;
+	EOF
 }
 
 set_launchers() {
-	# Jgmenu
-	sed -i "$HOME"/.config/bspwm/src/config/jgmenurc \
-		-e "s/color_menu_bg = .*/color_menu_bg = ${bg}/" \
-		-e "s/color_norm_fg = .*/color_norm_fg = ${fg}/" \
-		-e "s/color_sel_bg = .*/color_sel_bg = #222330/" \
-		-e "s/color_sel_fg = .*/color_sel_fg = ${fg}/" \
-		-e "s/color_sep_fg = .*/color_sep_fg = ${blackb}/"
-
 	# Rofi launchers
 	cat >"$HOME"/.config/bspwm/src/rofi-themes/shared.rasi <<EOF
-// Rofi colors
+	// Rofi colors
 
-* {
-    font: "JetBrainsMono NF Bold 9";
-    background: ${bg};
-    bg-alt: #222330;
-    background-alt: ${bg}E0;
-    foreground: ${fg};
-    selected: ${blue};
-    active: ${green};
-    urgent: ${red};
-}
-EOF
+	* {
+    		font: "JetBrainsMono NF Bold 9";
+    		background: ${bg};
+    		bg-alt: #222330;
+    		background-alt: ${bg}E0;
+    		foreground: ${fg};
+    		selected: ${blue};
+    		active: ${green};
+    		urgent: ${red};
+	}
+	EOF
 }
 
 # Launch theme
@@ -119,7 +111,6 @@ launch_theme() {
 ### Apply Configurations
 
 set_bspwm_config
-set_dunst_config
 set_eww_colors
 set_launchers
 launch_theme

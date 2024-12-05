@@ -39,7 +39,7 @@ pidof -q picom || { pkill picom; picom --config "${HOME}"/.config/bspwm/src/conf
 feh --no-fehbg --bg-fill "${HOME}"/.config/bspwm/Theme/walls/wallpaper-5.webp
 
 # Load theme
-"${HOME}"/.config/bspwm/Theme/launch.sh
+"${HOME}"/.config/bspwm/theme/launch.sh
 
 # Launch xsettingsd
 pidof -q xsettings || { xsettingsd --config="${HOME}"/.config/bspwm/src/config/xsettingsd >/dev/null 2>&1 & }
