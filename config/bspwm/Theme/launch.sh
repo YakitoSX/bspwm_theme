@@ -104,7 +104,9 @@ launch_theme() {
 	# Launch polybar
 	sleep 0.1
 	for mon in $(polybar --list-monitors | cut -d":" -f1); do
-		MONITOR=$mon polybar -q top-bar -c "${HOME}"/.config/bspwm/Theme/config.ini &
+		MONITOR=$mon polybar -q left-bar -c "${HOME}"/.config/bspwm/Theme/config.ini &
+		MONITOR=$mon polybar -q mid-bar -c "${HOME}"/.config/bspwm/Theme/config.ini &
+		MONITOR=$mon polybar -q right-bar -c "${HOME}"/.config/bspwm/Theme/config.ini &
 	done
 }
 
