@@ -127,6 +127,6 @@ case $1 in
         echo "$CITY"
         ;;
     "wmodule")
-        echo $WEATHER_ICON "$WEATHER_TEMP"°
+        [[ -z $WEATHER_TEMP ]] && echo $WEATHER_ICON "  "° || echo $WEATHER_ICON "$WEATHER_TEMP"°
         ;;
 esac

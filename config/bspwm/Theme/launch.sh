@@ -20,7 +20,7 @@ gtk_theme="TokyoNight-zk"	gtk_icons="Papirus-Dark"
 # Set bspwm configuration
 set_bspwm_config() {
 	bspc config border_width ${BORDER_WIDTH}
-	bspc config top_padding 50
+	bspc config top_padding 45
 	bspc config bottom_padding 1
 	bspc config left_padding 1
 	bspc config right_padding 1
@@ -99,7 +99,7 @@ set_launchers() {
 launch_theme() {
 
 	# Launch dunst notification daemon
-	dunst -config "${HOME}"/.config/bspwm/src/config/dunstrc &
+	#dunst -config "${HOME}"/.config/bspwm/src/config/dunstrc &
 
 	# Launch polybar
 	sleep 0.1

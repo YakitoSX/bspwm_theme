@@ -39,7 +39,7 @@ notify_user() {
 # Adjust Volume
 adjust_volume() {
     [[ $(pamixer --get-mute) == true ]] && pamixer -u
-    pamixer --allow-boost --set-limit 150 "$1" "$2" && get_icon && notify_user
+    pamixer --allow-boost --set-limit 100 "$1" "$2" && get_icon && notify_user
 }
 
 # Toggle Mute

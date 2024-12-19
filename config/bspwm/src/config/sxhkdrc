@@ -146,7 +146,7 @@ XF86Audio{RaiseVolume,LowerVolume,Mute}
 	"$HOME"/.config/bspwm/src/Volume.sh { --inc, --dec, --toggle}
 
 # Screenshot
-super + alt + s
+super + shift + s
 	OpenApps --screenshot
 
 # Clipboard
